@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RapidGo SLA Delivery Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "event_type",
+    "event_time",
+    "order_id",
+    "zone",
+    "distance_km",
+    "promised_at",
+    "picked_up_at",
+    "delivered_at",
+    "status"
+  ],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "event_type": {"type": "string", "enum": ["delivery_status"]},
+    "event_time": {"type": "string", "format": "date-time"},
+    "order_id": {"type": "string", "minLength": 1},
+    "zone": {"type": "string", "minLength": 1},
+    "distance_km": {"type": "number", "exclusiveMinimum": 0},
+    "promised_at": {"type": "string", "format": "date-time"},
+    "picked_up_at": {"type": "string", "format": "date-time"},
+    "delivered_at": {"type": ["string", "null"], "format": "date-time"},
+    "status": {
+      "type": "string",
+      "enum": ["created", "picked_up", "in_transit", "delivered", "cancelled"]
+    }
+  }
+}
