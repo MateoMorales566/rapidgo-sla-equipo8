@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="180" viewBox="0 0 1100 180" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitectura RapidGo SLA</title>
+  <desc id="desc">Productor, Kafka, Spark, Data Lake, Airflow y KPIs y alertas.</desc>
+  <style>
+    .box { fill: #e8f1fb; stroke: #1f4e79; stroke-width: 2; }
+    .label { fill: #102a43; font: 16px sans-serif; text-anchor: middle; }
+    .arrow { stroke: #52606d; stroke-width: 2; marker-end: url(#arrowhead); }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#52606d"/>
+    </marker>
+  </defs>
+  <rect class="box" x="20" y="55" width="140" height="60" rx="8"/>
+  <text class="label" x="90" y="91">Producer</text>
+  <rect class="box" x="190" y="55" width="140" height="60" rx="8"/>
+  <text class="label" x="260" y="91">Kafka</text>
+  <rect class="box" x="360" y="55" width="140" height="60" rx="8"/>
+  <text class="label" x="430" y="91">Spark</text>
+  <rect class="box" x="530" y="55" width="170" height="60" rx="8"/>
+  <text class="label" x="615" y="91">Data Lake</text>
+  <rect class="box" x="730" y="55" width="140" height="60" rx="8"/>
+  <text class="label" x="800" y="91">Airflow</text>
+  <rect class="box" x="900" y="55" width="180" height="60" rx="8"/>
+  <text class="label" x="990" y="83">KPIs y</text>
+  <text class="label" x="990" y="103">alertas SLA</text>
+  <line class="arrow" x1="160" y1="85" x2="190" y2="85"/>
+  <line class="arrow" x1="330" y1="85" x2="360" y2="85"/>
+  <line class="arrow" x1="500" y1="85" x2="530" y2="85"/>
+  <line class="arrow" x1="700" y1="85" x2="730" y2="85"/>
+  <line class="arrow" x1="870" y1="85" x2="900" y2="85"/>
+</svg>
