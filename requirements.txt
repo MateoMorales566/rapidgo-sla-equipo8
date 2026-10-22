@@ -1,0 +1,4 @@
+# Dependencias reservadas para la implementación de las semanas 2 y 3.
+pyspark==3.5.3
+kafka-python==2.0.2
+pytest==8.3.3
