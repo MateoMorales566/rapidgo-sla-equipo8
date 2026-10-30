@@ -1,5 +1,0 @@
-KPIs y observaciones adicionales - Semana 2
-Tiempo promedio de entrega: 38 min (objetivo <= 45 min)
-% Fuera de SLA: 8.2% (objetivo <= 10%)
-1 pedido con detención > 30 min (alerta DELIVERY_STOPPED activada)
-Umbrales iniciales definidos: 10% fuera SLA, 30 min detención

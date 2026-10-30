@@ -1,0 +1,14 @@
+.git
+.gitignore
+*.pdf
+datalake
+reports
+__pycache__
+*.py[cod]
+.pytest_cache
+.venv
+.idea
+.vscode
+spark-warehouse
+metastore_db
+derby.log
