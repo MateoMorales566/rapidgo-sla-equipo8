@@ -1,3 +1,5 @@
+name: rapidgo-sla-equipo8
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
@@ -24,11 +26,49 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_NUM_PARTITIONS: 3
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:29092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+
+  kafka-init:
+    image: confluentinc/cp-kafka:7.6.1
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command:
+      - bash
+      - -c
+      - |
+        kafka-topics --bootstrap-server kafka:29092 \
+          --create --if-not-exists \
+          --topic rapidgo.sla.events \
+          --partitions 3 \
+          --replication-factor 1
+        kafka-topics --bootstrap-server kafka:29092 \
+          --describe --topic rapidgo.sla.events
+    restart: "no"
+
+  producer:
+    build:
+      context: .
+      dockerfile: producer/Dockerfile
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      KAFKA_TOPIC: rapidgo.sla.events
+    command: ["python", "-m", "producer.producer", "--count", "0", "--interval", "1.0"]
+    restart: unless-stopped
 
   spark-master:
     image: bitnami/spark:3.5.3
     hostname: spark-master
-    command: /opt/bitnami/spark/sbin/start-master.sh
+    environment:
+      SPARK_MODE: master
     ports:
       - "7077:7077"
       - "8080:8080"
@@ -44,3 +84,32 @@ services:
       SPARK_MASTER_URL: spark://spark-master:7077
     ports:
       - "8081:8081"
+
+  spark-job:
+    image: bitnami/spark:3.5.3
+    user: root
+    depends_on:
+      kafka-init:
+        condition: service_completed_successfully
+    environment:
+      PYSPARK_PYTHON: python3
+      DATALAKE_BASE: /opt/rapidgo/datalake
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      KAFKA_TOPIC: rapidgo.sla.events
+      SPARK_KAFKA_PACKAGE: org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.3
+    volumes:
+      - ./spark:/opt/rapidgo/spark:ro
+      - ./datalake:/opt/rapidgo/datalake
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        exec /opt/bitnami/spark/bin/spark-submit \
+          --master "local[2]" \
+          --packages "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.3" \
+          /opt/rapidgo/spark/streaming_job.py \
+          --bootstrap-servers "kafka:29092" \
+          --topic "rapidgo.sla.events" \
+          --datalake "/opt/rapidgo/datalake" \
+          --spark-master "local[2]" \
+          --interval "10 seconds"
+    restart: "no"

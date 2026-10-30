@@ -1,19 +1,10 @@
-# Dependencias del proyecto RapidGo SLA
+# Dependencias de runtime y CI del proyecto RapidGo SLA
+# (Kafka, validación de contrato y pruebas; Spark va en requirements-spark.txt)
 
-# Procesamiento de datos
-pandas>=2.0.0
-numpy>=1.24.0
-
-# Kafka y Spark
-confluent-kafka>=1.3.0
-apache-spark>=3.5.0
-
-# JSON Schema validation
-jsonschema>=4.20.0
-
-# Testing
-pytest>=7.0.0
-pytest-mock>=3.10.0
-
-# Utilities
+confluent-kafka>=2.3.0
+jsonschema[format]>=4.20.0
 python-dotenv>=1.0.0
+
+# Testing / GitHub Actions
+pytest>=7.4.0
+pytest-mock>=3.10.0

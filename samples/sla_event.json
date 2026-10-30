@@ -1,5 +1,6 @@
 {
   "event_id": "evt-000001",
+  "team_id": "equipo8",
   "event_type": "delivery_status",
   "event_time": "2026-10-22T13:30:00Z",
   "order_id": "order-1001",

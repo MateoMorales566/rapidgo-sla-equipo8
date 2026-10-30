@@ -1,0 +1,37 @@
+name: Release RapidGo
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag existente a publicar (ej. v0.2.0-streaming)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  publicar-release:
+    name: Publicar GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Crear release con notas automáticas
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "El release $TAG ya existe"
+          else
+            gh release create "$TAG" \
+              --title "RapidGo SLA $TAG" \
+              --generate-notes
+          fi

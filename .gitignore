@@ -3,8 +3,25 @@ __pycache__/
 .pytest_cache/
 .venv/
 *.log
+
+# Guías del docente: no forman parte del código del proyecto
+Guia_Proyecto_Final_BigData_RapidGo (1).pdf
+Guia_Introduccion_GitHub_Actions_Python-1.pdf
+*.pdf
+
+# Data Lake generado por la ejecución
 datalake/raw/*
 datalake/processed/*
 datalake/curated/*
+datalake/**/_checkpoints/
 !datalake/**/.gitkeep
+
+# Spark / Python
+spark-warehouse/
+metastore_db/
+derby.log
+reports/
+.env
+.idea/
+.vscode/
 .DS_Store
