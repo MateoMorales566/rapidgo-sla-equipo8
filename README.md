@@ -188,6 +188,10 @@ está reservado para el DAG de calidad, agregación y reporte.
 - Evidencia de ejecución: [`docs/evidencias/semana2.md`](docs/evidencias/semana2.md)
 - ADR-002: [`docs/decisions/ADR-002-ventana-watermark-checkpoints.md`](docs/decisions/ADR-002-ventana-watermark-checkpoints.md)
 - Actions: pestaña **Actions → CI RapidGo** del repositorio.
+  - CI en verde (PR): [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
+  - Fallo controlado: [run 40985829295](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985829295)
+  - Ejecución manual: [run 40985938802](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985938802)
+- Actividad de transferencia de GitHub Actions: [`docs/actions/actividad_transferencia.md`](docs/actions/actividad_transferencia.md)
 
 ## Limitaciones conocidas
 

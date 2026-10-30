@@ -118,3 +118,33 @@ docker compose logs -f spark-job
 Evidencia esperada: 3 particiones en el topic, eventos del producer, archivos Parquet en
 `datalake/raw`, `datalake/processed`, `datalake/curated/kpis` y
 `datalake/curated/alerts`.
+
+## 7. CI en GitHub Actions
+
+El workflow `CI RapidGo` (`.github/workflows/ci.yml`) se ejecuta en `push`,
+`pull_request` hacia `main` y `workflow_dispatch`. Dos jobs: **Sintaxis, contrato y
+pruebas** y **Docker Compose y archivos del proyecto**.
+
+| Escenario | Commit | Run |
+|---|---|---|
+| Push inicial en verde | `1c93efe` | [40985753336](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985753336) |
+| PR en verde | `1c93efe` | [40985764861](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985764861) |
+| Fallo controlado (prueba rota a propósito) | `6f10a18` | [40985829295](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985829295) |
+| Corrección, CI en verde | `e6cc5ce` | [40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801) |
+| Ejecución manual `workflow_dispatch` | `e6cc5ce` | [40985938802](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985938802) |
+
+Línea esencial del fallo controlado:
+
+```text
+E       AssertionError: assert 'CUMPLE' == 'FUERA_SLA'
+FAILED tests/test_sla.py::test_clasificar_cumplimiento_limite - AssertionError
+```
+
+Solo falló el step **Ejecutar pruebas**; `Instalar dependencias`, `Validar sintaxis
+Python` y `Validar contrato JSON` pasaron, lo que confirma que el fallo era de la regla y
+no del entorno. El análisis completo está en
+[`docs/actions/actividad_transferencia.md`](../actions/actividad_transferencia.md).
+
+Los runs muestran la anotación del runner: `The ubuntu-latest label will migrate to
+Ubuntu 26 beginning October 19, 2026`. No afecta al resultado actual, pero conviene fijar
+`ubuntu-24.04` o migrar antes de esa fecha si se quiere reproducibilidad exacta.

@@ -36,7 +36,9 @@ Al ejecutar `pytest` desde la raíz, **5 de 6 pruebas fallaban** por la ruta rel
 
 - Issue: [#4 Producer](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/4), [#5 Kafka/Spark](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/5), [#6 Data Lake](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/6)
 - Pull Request: [#19 feature/semana2-pipeline-ci](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/19)
-- Actions: se enlaza la ejecución del PR #19 en la pestaña **Actions → CI RapidGo**.
+- CI en verde: [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
+- Fallo controlado: [run 40985829295](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985829295)
+- Ejecución manual: [run 40985938802](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985938802)
 
 ## 5. Plan de la Semana 3
 
