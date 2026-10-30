@@ -74,7 +74,7 @@ def test_clasificar_cumplimiento_normal():
 
 
 def test_clasificar_cumplimiento_limite():
-    assert clasificar_cumplimiento(45, 45) == "CUMPLE"
+    assert clasificar_cumplimiento(45, 45) == "FUERA_SLA"  # fallo intencional temporal
     assert clasificar_cumplimiento(45.01, 45) == "FUERA_SLA"
 
 
