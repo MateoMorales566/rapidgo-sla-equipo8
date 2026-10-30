@@ -1,0 +1,62 @@
+[
+  {
+    "event_id": "evt-a1b2c3",
+    "event_type": "delivery_status",
+    "event_time": "2026-10-29T14:30:00Z",
+    "order_id": "order-1001",
+    "zone": "Norte",
+    "distance_km": 4.8,
+    "promised_at": "2026-10-29T13:20:00Z",
+    "picked_up_at": "2026-10-29T12:55:00Z",
+    "delivered_at": "2026-10-29T13:30:00Z",
+    "status": "delivered"
+  },
+  {
+    "event_id": "evt-d4e5f6",
+    "event_type": "delivery_status",
+    "event_time": "2026-10-29T15:15:00Z",
+    "order_id": "order-1002",
+    "zone": "Sur",
+    "distance_km": 8.2,
+    "promised_at": "2026-10-29T14:40:00Z",
+    "picked_up_at": "2026-10-29T14:10:00Z",
+    "delivered_at": "2026-10-29T15:30:00Z",
+    "status": "in_transit"
+  },
+  {
+    "event_id": "evt-g7h8i9",
+    "event_type": "delivery_status",
+    "event_time": "2026-10-29T16:00:00Z",
+    "order_id": "order-1003",
+    "zone": "Este",
+    "distance_km": 2.1,
+    "promised_at": "2026-10-29T15:30:00Z",
+    "picked_up_at": "2026-10-29T15:00:00Z",
+    "delivered_at": "2026-10-29T16:15:00Z",
+    "status": "delivered"
+  },
+  {
+    "event_id": "evt-j0k1l2",
+    "event_type": "delivery_status",
+    "event_time": "2026-10-29T16:45:00Z",
+    "order_id": "order-1004",
+    "zone": "Oeste",
+    "distance_km": 12.5,
+    "promised_at": "2026-10-29T16:10:00Z",
+    "picked_up_at": "2026-10-29T16:00:00Z",
+    "delivered_at": "2026-10-29T17:00:00Z",
+    "status": "cancelled"
+  },
+  {
+    "event_id": "evt-m3n4o5",
+    "event_type": "delivery_status",
+    "event_time": "2026-10-29T17:30:00Z",
+    "order_id": "order-1005",
+    "zone": "Centro",
+    "distance_km": 6.7,
+    "promised_at": "2026-10-29T17:00:00Z",
+    "picked_up_at": "2026-10-29T16:30:00Z",
+    "delivered_at": "2026-10-29T18:00:00Z",
+    "status": "created"
+  }
+]
