@@ -1,0 +1,12 @@
+{
+  "event_id": "evt-a1b2c3",
+  "event_type": "delivery_status",
+  "event_time": "2026-10-29T14:30:00Z",
+  "order_id": "order-1001",
+  "zone": "Norte",
+  "distance_km": 4.8,
+  "promised_at": "2026-10-29T13:20:00Z",
+  "picked_up_at": "2026-10-29T12:55:00Z",
+  "delivered_at": "2026-10-29T13:30:00Z",
+  "status": "delivered"
+}

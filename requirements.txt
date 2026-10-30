@@ -1,4 +1,19 @@
-# Dependencias reservadas para la implementación de las semanas 2 y 3.
-pyspark==3.5.3
-kafka-python==2.0.2
-pytest==8.3.3
+# Dependencias del proyecto RapidGo SLA
+
+# Procesamiento de datos
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Kafka y Spark
+confluent-kafka>=1.3.0
+apache-spark>=3.5.0
+
+# JSON Schema validation
+jsonschema>=4.20.0
+
+# Testing
+pytest>=7.0.0
+pytest-mock>=3.10.0
+
+# Utilities
+python-dotenv>=1.0.0
