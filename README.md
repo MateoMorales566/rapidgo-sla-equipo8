@@ -253,7 +253,8 @@ Detalle: [`docs/checkpoints/semana3.md`](docs/checkpoints/semana3.md),
 - Evidencia de ejecución: [`docs/evidencias/semana2.md`](docs/evidencias/semana2.md)
 - ADR-002: [`docs/decisions/ADR-002-ventana-watermark-checkpoints.md`](docs/decisions/ADR-002-ventana-watermark-checkpoints.md)
 - Actions: pestaña **Actions → CI RapidGo** del repositorio.
-  - CI en verde (PR): [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
+  - Semana 3 en verde (PR #25): [run 42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397)
+  - CI en verde Semana 2 (PR): [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
   - Fallo controlado: [run 40985829295](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985829295)
   - Ejecución manual: [run 40985938802](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985938802)
 - Actividad de transferencia de GitHub Actions: [`docs/actions/actividad_transferencia.md`](docs/actions/actividad_transferencia.md)

@@ -180,5 +180,8 @@ El workflow `CI RapidGo` tiene tres jobs:
 3. `validar-configuracion`: valida el compose base y el overlay de Semana 3, el contrato
    JSON y la estructura mínima del repositorio.
 
-Los enlaces de la ejecución de la rama se agregan al PR y al README cuando el workflow
-termine.
+Los enlaces de la ejecución de la rama:
+
+- PR draft: [#25](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/25)
+- CI completo en verde: [run 42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397)
+- Job del DAG (importación, fallo controlado y recuperación): [job 127663010836](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397/job/127663010836)
