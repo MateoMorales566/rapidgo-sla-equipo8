@@ -16,6 +16,14 @@ datalake/curated/*
 datalake/**/_checkpoints/
 !datalake/**/.gitkeep
 
+# Airflow (Semana 3)
+airflow/logs/
+airflow/airflow.db
+airflow/airflow.cfg
+airflow/webserver_config.py
+airflow/flags/*
+!airflow/flags/.gitkeep
+
 # Spark / Python
 spark-warehouse/
 metastore_db/

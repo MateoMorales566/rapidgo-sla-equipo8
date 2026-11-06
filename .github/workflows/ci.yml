@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validar-python:
+  calidad-codigo:
     name: Sintaxis, contrato y pruebas
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +36,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Validar sintaxis Python
-        run: python -m compileall -q producer spark sla tests
+        run: python -m compileall -q producer spark sla semana3 airflow/dags tests
 
       - name: Validar contrato JSON y eventos de muestra
         run: |
@@ -56,6 +56,118 @@ jobs:
           path: reports/junit.xml
           if-no-files-found: warn
 
+  dag-airflow:
+    name: DAG Airflow (importación, ejecución y recuperación)
+    runs-on: ubuntu-latest
+    env:
+      AIRFLOW_HOME: ${{ runner.temp }}/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_FOLDER: ${{ github.workspace }}/airflow/dags
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__CORE__DEFAULT_TIMEZONE: America/Bogota
+      AIRFLOW__LOGGING__BASE_LOG_FOLDER: ${{ github.workspace }}/reports/airflow-logs
+      PYTHONPATH: ${{ github.workspace }}
+      RAPIDGO_DATALAKE: ${{ github.workspace }}/reports/ci-datalake
+      RAPIDGO_REPORTS: ${{ github.workspace }}/reports/ci-reports
+      RAPIDGO_FLAGS: ${{ github.workspace }}/reports/ci-flags
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v7
+
+      - name: Configurar Python para Airflow
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Instalar Airflow y dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-airflow.txt \
+            --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.11.txt"
+          pip install -r requirements.txt
+          airflow version
+
+      - name: Generar Data Lake de prueba
+        run: |
+          python -m semana3.sample_data \
+            --input producer/sla_events_batch.json \
+            --output reports/ci-datalake \
+            --overwrite
+
+      - name: Validar importación y estructura del DAG
+        run: |
+          python - <<'PY'
+          from airflow.models.dagbag import DagBag
+
+          bag = DagBag(dag_folder="airflow/dags", include_examples=False)
+          assert not bag.import_errors, bag.import_errors
+
+          dag = bag.dags.get("rapidgo_sla_semana3")
+          assert dag is not None, "El DAG rapidgo_sla_semana3 no se importó"
+          assert len(dag.tasks) == 6, f"Se esperaban 6 tareas, hay {len(dag.tasks)}"
+          assert dag.default_args["retries"] == 2
+          assert dag.schedule is None
+          print("DAG validado:", dag.dag_id, len(dag.tasks), "tasks")
+          print("Tareas:", ", ".join(sorted(task.task_id for task in dag.tasks)))
+          PY
+
+      - name: Inicializar base de datos de Airflow
+        run: airflow db migrate
+
+      - name: Ejecutar DAG completo
+        run: airflow dags test rapidgo_sla_semana3 2026-11-01
+
+      - name: Fallo controlado del quality gate
+        run: |
+          mkdir -p reports/ci-flags
+          touch reports/ci-flags/forzar_fallo_calidad
+          set +e
+          airflow dags test rapidgo_sla_semana3 2026-11-06 > reports/fallo_controlado.log 2>&1
+          status=$?
+          set -e
+          echo "Código de salida del run fallido: $status"
+          if [ "$status" -eq 0 ]; then
+            echo "ERROR: el DAG debió fallar con la bandera activa"
+            exit 1
+          fi
+          grep -q "FALLO_CONTROLADO" reports/fallo_controlado.log
+          grep -q "forzar_fallo_calidad" reports/fallo_controlado.log
+          airflow tasks states-for-dag-run rapidgo_sla_semana3 \
+            "manual__2026-11-06T00:00:00-05:00" | tee reports/estados_fallo.log
+          grep -q "validar_calidad.*failed" reports/estados_fallo.log
+          grep -q "calcular_indicadores.*upstream_failed" reports/estados_fallo.log
+          grep -q "publicar_resultado.*upstream_failed" reports/estados_fallo.log
+          rm -f reports/ci-flags/forzar_fallo_calidad
+          echo "Fallo controlado verificado; tareas aguas abajo bloqueadas"
+
+      - name: Recuperación tras eliminar la bandera
+        run: |
+          airflow dags test rapidgo_sla_semana3 2026-11-07
+          test -f reports/ci-reports/sla_semana3_latest.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(
+              Path("reports/ci-reports/sla_semana3_latest.json").read_text(encoding="utf-8")
+          )
+          assert report["quality"]["passed"] is True
+          assert report["metrics"]["pedidos_unicos"] > 0
+          print("Reporte recuperado:", report["metrics"])
+          PY
+
+      - name: Publicar reporte y logs del DAG
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reporte-airflow
+          path: |
+            reports/ci-reports/
+            reports/airflow-logs/
+            reports/fallo_controlado.log
+          if-no-files-found: warn
+
   validar-configuracion:
     name: Docker Compose y archivos del proyecto
     runs-on: ubuntu-latest
@@ -63,8 +175,10 @@ jobs:
       - name: Descargar repositorio
         uses: actions/checkout@v7
 
-      - name: Validar docker-compose
-        run: docker compose config --quiet
+      - name: Validar docker-compose base y Semana 3
+        run: |
+          docker compose config --quiet
+          docker compose -f docker-compose.yml -f docker-compose.semana3.yml config --quiet
 
       - name: Validar JSON del contrato
         run: python -c "import json; json.load(open('docs/contrato_evento.json', encoding='utf-8'))"
@@ -73,10 +187,21 @@ jobs:
         run: |
           test -f README.md
           test -f docker-compose.yml
+          test -f docker-compose.semana3.yml
           test -f requirements.txt
+          test -f requirements-airflow.txt
+          test -f airflow/dags/rapidgo_sla_orchestration.py
+          test -f docs/checkpoints/semana1.md
+          test -f docs/checkpoints/semana2.md
+          test -f docs/checkpoints/semana3.md
+          test -f docs/decisions/ADR-001-kafka-sla.md
+          test -f docs/decisions/ADR-002-ventana-watermark-checkpoints.md
+          test -f docs/decisions/ADR-003-orquestacion-y-recuperacion.md
           test -d .github/workflows
+          test -d airflow/flags
           test -d producer
           test -d spark
+          test -d semana3
           test -d tests
           test -d datalake/raw
           test -d datalake/processed
