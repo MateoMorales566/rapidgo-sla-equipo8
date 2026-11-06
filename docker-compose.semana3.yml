@@ -1,0 +1,34 @@
+# Overlay de Semana 3: Airflow para el DAG batch de calidad y reporte.
+# Se usa junto al compose base:
+#   docker compose -f docker-compose.yml -f docker-compose.semana3.yml up -d
+#
+# Solo necesita la capa `processed` que produce Spark streaming; no vuelve a
+# escribir Parquet ni toca los checkpoints del job de streaming.
+
+name: rapidgo-sla-equipo8
+
+services:
+  airflow:
+    image: apache/airflow:2.9.3
+    hostname: airflow
+    command: standalone
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      AIRFLOW__CORE__PARALLELISM: "4"
+      PYTHONPATH: /opt/rapidgo
+      RAPIDGO_DATALAKE: /opt/rapidgo/datalake
+      RAPIDGO_REPORTS: /opt/airflow/reports
+      RAPIDGO_FLAGS: /opt/airflow/flags
+      # pyarrow no viene en la imagen oficial; se instala al arrancar.
+      _PIP_ADDITIONAL_REQUIREMENTS: pyarrow==17.0.0
+    ports:
+      - "8088:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags:ro
+      - ./airflow/flags:/opt/airflow/flags
+      - ./reports:/opt/airflow/reports
+      - ./datalake:/opt/rapidgo/datalake
+      - ./semana3:/opt/rapidgo/semana3:ro
+      - ./sla:/opt/rapidgo/sla:ro
+    restart: unless-stopped

@@ -1,0 +1,43 @@
+name: CI RapidGo Semana 3
+on:
+  push:
+    branches: [main, 'feature/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validar-semana3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar dependencias de validacion
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install 'apache-airflow==2.9.3' --constraint 'https://raw.githubusercontent.com/apache/airflow/constraints-2.9.3/constraints-3.11.txt'
+          pip install pyarrow==17.0.0
+      - name: Validar sintaxis y pruebas de negocio
+        run: |
+          python -m compileall -q producer spark sla semana3 airflow/dags tests
+          python -m pytest -q
+      - name: Comprobar importacion del DAG
+        env:
+          PYTHONPATH: .
+          AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+          AIRFLOW__CORE__DAGS_FOLDER: airflow/dags
+        run: |
+          python - <<'PY'
+          from airflow.models.dagbag import DagBag
+          bag = DagBag(dag_folder='airflow/dags', include_examples=False)
+          assert not bag.import_errors, bag.import_errors
+          dag = bag.dags.get('rapidgo_sla_semana3')
+          assert dag is not None and len(dag.tasks) >= 5
+          print('DAG validado:', dag.dag_id, len(dag.tasks), 'tasks')
+          PY
+      - name: Comprobar configuracion de Docker
+        run: docker compose -f docker-compose.yml -f docker-compose.semana3.yml config --quiet
