@@ -60,7 +60,7 @@ jobs:
     name: DAG Airflow (importación, ejecución y recuperación)
     runs-on: ubuntu-latest
     env:
-      AIRFLOW_HOME: ${{ runner.temp }}/airflow
+      AIRFLOW_HOME: ${{ github.workspace }}/reports/airflow-home
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__CORE__DAGS_FOLDER: ${{ github.workspace }}/airflow/dags
       AIRFLOW__CORE__EXECUTOR: SequentialExecutor
