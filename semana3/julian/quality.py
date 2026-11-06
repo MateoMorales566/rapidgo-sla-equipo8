@@ -29,3 +29,6 @@ def evaluate_quality(profile: dict) -> dict:
         "missing_columns": missing_columns,
         "rows_count": profile.get("rows_count", 0),
     }
+from Semana3.quality import evaluate_quality, inspect_parquet
+
+__all__ = ["inspect_parquet", "evaluate_quality"]
