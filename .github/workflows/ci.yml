@@ -107,7 +107,7 @@ jobs:
           assert dag is not None, "El DAG rapidgo_sla_semana3 no se importó"
           assert len(dag.tasks) == 6, f"Se esperaban 6 tareas, hay {len(dag.tasks)}"
           assert dag.default_args["retries"] == 2
-          assert dag.schedule is None
+          assert dag.schedule_interval is None
           print("DAG validado:", dag.dag_id, len(dag.tasks), "tasks")
           print("Tareas:", ", ".join(sorted(task.task_id for task in dag.tasks)))
           PY
