@@ -70,4 +70,4 @@ retirar la bandera; no se borraron Parquet ni checkpoints.
 - Pull Request de la rama `feature/semana3-orquestacion`: [#25](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/25) (draft, sin merge a `main`).
 - CI `CI RapidGo`: job `dag-airflow` ejecuta importación, run exitoso, fallo controlado y recuperación. Run en verde: [42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397).
 - Evidencia detallada: [`docs/evidencias/semana3.md`](../evidencias/semana3.md).
-- Release `v0.3.0-orchestration`: pendiente de publicación desde la rama (sin merge a `main`).
+- Release `v0.3.0-orchestration`: pre-release publicado desde la rama (sin merge a `main`): [releases/tag/v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration).

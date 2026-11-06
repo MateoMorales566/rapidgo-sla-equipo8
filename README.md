@@ -32,7 +32,7 @@ alertas listas para consulta y para la orquestación de la Semana 3.
 |---|---|---|
 | `v0.1.0-foundation` | 1 | ✅ Publicado |
 | `v0.2.0-streaming` | 2 | ✅ Implementado y validado en CI en la rama `feature/semana2-pipeline-ci`; el tag se crea desde `main` después del merge |
-| `v0.3.0-orchestration` | 3 | ✅ Implementado y validado en la rama `feature/semana3-orquestacion`; sin merge a `main` |
+| `v0.3.0-orchestration` | 3 | ✅ Pre-release publicado desde la rama `feature/semana3-orquestacion` (sin merge a `main`) |
 | `v1.0.0` | 4 | ⏳ Release final y video |
 
 ## Arquitectura
@@ -252,6 +252,7 @@ Detalle: [`docs/checkpoints/semana3.md`](docs/checkpoints/semana3.md),
 - Checkpoint Semana 2: [`docs/checkpoints/semana2.md`](docs/checkpoints/semana2.md)
 - Evidencia de ejecución: [`docs/evidencias/semana2.md`](docs/evidencias/semana2.md)
 - ADR-002: [`docs/decisions/ADR-002-ventana-watermark-checkpoints.md`](docs/decisions/ADR-002-ventana-watermark-checkpoints.md)
+- Release `v0.3.0-orchestration` (pre-release): [releases/tag/v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
 - Actions: pestaña **Actions → CI RapidGo** del repositorio.
   - Semana 3 en verde (PR #25): [run 42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397)
   - CI en verde Semana 2 (PR): [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
