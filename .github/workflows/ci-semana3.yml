@@ -35,7 +35,7 @@ jobs:
           from airflow.models.dagbag import DagBag
           bag = DagBag(dag_folder='airflow/dags', include_examples=False)
           assert not bag.import_errors, bag.import_errors
-          dag = bag.get_dag('rapidgo_sla_semana3')
+          dag = bag.dags.get('rapidgo_sla_semana3')
           assert dag is not None and len(dag.tasks) >= 5
           print('DAG validado:', dag.dag_id, len(dag.tasks), 'tasks')
           PY
