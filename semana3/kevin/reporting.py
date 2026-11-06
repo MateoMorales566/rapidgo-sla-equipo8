@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pyarrow.parquet as pq
+
 
 def summarize_records(rows: list[dict]) -> dict:
     latest_by_order: dict[str, dict] = {}
@@ -25,6 +27,14 @@ def summarize_records(rows: list[dict]) -> dict:
         "tiempo_promedio_min": round(avg_delivery),
         "porcentaje_fuera_sla": round(late_pct),
     }
+
+
+def summarize_sla(processed_paths: list[str]) -> dict:
+    rows: list[dict] = []
+    for path in processed_paths:
+        table = pq.read_table(path)
+        rows.extend(table.to_pylist())
+    return summarize_records(rows)
 
 
 def save_report(report: dict, output_dir: str | Path) -> dict:
