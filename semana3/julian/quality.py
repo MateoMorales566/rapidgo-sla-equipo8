@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-import pyarrow.parquet as pq
-
-
 def inspect_parquet(processed_paths: list[str]) -> dict:
+    try:
+        import pyarrow.parquet as pq
+    except ModuleNotFoundError as exc:
+        raise RuntimeError("pyarrow es requerido para perfilar Parquet") from exc
+
     rows = 0
     columns: set[str] = set()
     for path in processed_paths:

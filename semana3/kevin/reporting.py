@@ -3,9 +3,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import pyarrow.parquet as pq
-
-
 def summarize_records(rows: list[dict]) -> dict:
     latest_by_order: dict[str, dict] = {}
     for row in rows:
@@ -30,6 +27,11 @@ def summarize_records(rows: list[dict]) -> dict:
 
 
 def summarize_sla(processed_paths: list[str]) -> dict:
+    try:
+        import pyarrow.parquet as pq
+    except ModuleNotFoundError as exc:
+        raise RuntimeError("pyarrow es requerido para resumir SLA desde Parquet") from exc
+
     rows: list[dict] = []
     for path in processed_paths:
         table = pq.read_table(path)
