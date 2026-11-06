@@ -1,20 +1,79 @@
-# ADR-003 — Orquestación batch y recuperación de fallos
+# ADR-003 - Orquestación batch y recuperación de fallos
 
-## Contexto
-La Semana 2 mantiene Spark Structured Streaming como procesamiento continuo. Airflow no debe sustituirlo ni reescribir sus checkpoints: debe inspeccionar el Parquet ya producido, ejecutar controles y emitir reportes.
+## Contexto / problema
+
+La Semana 2 dejó Spark Structured Streaming escribiendo las capas `raw`, `processed` y
+`curated`, con un checkpoint por capa. La Semana 3 exige un DAG de Airflow con mínimo 5
+tareas, dependencias, retries, XCom, validación de datos, una tarea de calidad, una salida
+de reporting y un fallo controlado con recuperación documentada.
+
+El riesgo principal era acoplar Airflow al streaming: si el DAG reiniciara consultas,
+borrara checkpoints o compitiera por los mismos offsets, se podrían duplicar datos o
+perder trazabilidad.
 
 ## Opciones consideradas
-1. Controlar directamente los procesos streaming desde tareas periódicas de Airflow.
-2. Usar un DAG batch bajo demanda para revisar la capa `processed` y generar indicadores/reportes.
 
-## Decisión
-Se adopta la opción 2: un DAG sin cron (`schedule=None`) con seis tareas, `retries=2`, `retry_delay=30s` y XCom para transportar metadatos pequeños. La lectura de los eventos sigue en Parquet; **no se intercambian datasets grandes por XCom**.
+1. **Controlar el streaming desde Airflow.** Un DAG que arranca y detiene
+   `spark-submit`, o que reinicia consultas con `writeStream`. Da una sola interfaz, pero
+   mezcla dos modelos de ejecución y puede tocar checkpoints desde un proceso batch.
+2. **DAG batch bajo demanda sobre `processed` (decisión tomada).** Airflow lee el Parquet
+   que ya escribió Spark, valida calidad, agrega KPIs y publica un reporte. No reinicia
+   Spark ni modifica checkpoints.
+3. **Solo streaming, sin Airflow.** Menos componentes, pero incumple el gate de la
+   Semana 3 y no deja un punto único para calidad y reporte.
 
-## Recuperación
-Se crea `airflow/flags/forzar_fallo_calidad`, se ejecuta el DAG y se comprueba el fallo `FALLO_CONTROLADO`. Después se elimina la bandera y se ejecuta otra vez. Las tareas no borran Parquet ni checkpoints de Spark. El reporte se reemplaza atómicamente (`.tmp` -> `.json`) para evitar salidas parciales.
+## Decisión tomada
 
-## Evidencia pendiente
-Completar al ejecutar localmente: fecha, DAG run ID, error exacto copiado de Airflow, captura del primer run fallido y segundo run exitoso, enlaces de PR y Actions. No atribuir estas pruebas a una ejecución que aún no ocurrió.
+- DAG `rapidgo_sla_semana3` con **6 tareas** encadenadas y `schedule=None`.
+- `default_args` con `retries=2` y `retry_delay=30s`. La tarea `validar_calidad` usa
+  `retries=0` a propósito: un fallo de calidad no se corrige reintentando, y así el fallo
+  controlado termina con las tareas aguas abajo en `upstream_failed`.
+- XCom transporta únicamente rutas, conteos y resultados pequeños; las filas se leen
+  desde Parquet en cada tarea que las necesita.
+- El quality gate exige columnas mínimas, al menos una fila, cero `event_id` duplicados y
+  cero filas inválidas (`RAPIDGO_MAX_INVALID_RATIO=0` por defecto).
+- El reporte se escribe de forma atómica con archivo temporal + `os.replace`.
+- El fallo controlado se activa con `airflow/flags/forzar_fallo_calidad`; la recuperación
+  consiste en retirar la bandera y lanzar un run nuevo.
 
-## Consecuencias
-Ventaja: separación de streaming y control batch, fácil depuración. Coste: más componentes Docker y dependencia de `pyarrow`. El gate falla cuando el directorio está vacío o faltan datos fundamentales.
+## Evidencia utilizada
+
+Ejecución real en Docker con el lote `producer/sla_events_batch.json`:
+
+```text
+Eventos: 120
+Pedidos únicos: 30
+Pedidos entregados: 25
+Tiempo promedio: 36.56 min
+Porcentaje fuera de SLA: 12.0 %
+Pedidos retrasados: 3
+Alertas SLA_EXCEEDED: 3
+Alertas DELIVERY_STOPPED: 3
+```
+
+- Run exitoso: `manual__2026-11-01T00:00:00-05:00`; las 6 tareas en `success`.
+- Run fallido: `manual__2026-11-06T00:00:00-05:00`; `validar_calidad` en `failed` y
+  `calcular_indicadores`, `generar_reporte`, `publicar_resultado` en `upstream_failed`.
+- Mensaje real del log:
+  `RuntimeError: FALLO_CONTROLADO: bandera de calidad activa
+  (/opt/airflow/flags/forzar_fallo_calidad). Bórrela y vuelva a ejecutar el DAG.`
+- Recuperación: `manual__2026-11-07T00:00:00-05:00` en `success`, con el mismo reporte
+  regenerado.
+
+El detalle de comandos y estados está en
+[`docs/evidencias/semana3.md`](../evidencias/semana3.md) y en
+[`docs/checkpoints/semana3.md`](../checkpoints/semana3.md).
+
+## Consecuencias / trade-offs
+
+- Ventaja: separación clara entre streaming continuo y control batch; el DAG se puede
+  repetir sin duplicar datos y sin tocar los checkpoints de Spark.
+- Coste: un componente más (Airflow + pyarrow) y un volumen compartido para `datalake` y
+  `reports`.
+- El quality gate es estricto: una sola fila inválida bloquea el reporte. Para lotes
+  reales con datos sucios habrá que ajustar `RAPIDGO_MAX_INVALID_RATIO` y documentar el
+  cambio; el valor por defecto 0 es intencional para la demo.
+- El 12 % fuera de SLA supera el objetivo inicial del 10 %. No se cambia el umbral en la
+  Semana 3: se documenta como hallazgo de negocio y se calibrará por zona en la Semana 4.
+- Las credenciales `admin/admin` y la `FERNET_KEY` del compose son solo para la demo
+  local; no deben reutilizarse en producción.

@@ -32,7 +32,7 @@ alertas listas para consulta y para la orquestación de la Semana 3.
 |---|---|---|
 | `v0.1.0-foundation` | 1 | ✅ Publicado |
 | `v0.2.0-streaming` | 2 | ✅ Implementado y validado en CI en la rama `feature/semana2-pipeline-ci`; el tag se crea desde `main` después del merge |
-| `v0.3.0-orchestration` | 3 | ⏳ Airflow, calidad y resiliencia |
+| `v0.3.0-orchestration` | 3 | ✅ Pre-release publicado desde la rama `feature/semana3-orquestacion` (sin merge a `main`) |
 | `v1.0.0` | 4 | ⏳ Release final y video |
 
 ## Arquitectura
@@ -46,7 +46,10 @@ producer/ (confluent-kafka, key=order_id, team_id=equipo8)
       -> datalake/curated/
            kpis/             (ventana 15 min por zona)
            alerts/           (SLA_EXCEEDED, DELIVERY_STOPPED)
-      -> Airflow (calidad, agregación y reporte; Semana 3)
+      -> Airflow (batch bajo demanda: calidad, KPIs y reporte)
+           validar_fuente -> perfilar_datos -> validar_calidad
+           -> calcular_indicadores -> generar_reporte -> publicar_resultado
+      -> reports/sla_semana3_latest.json
 ```
 
 Diagrama y decisiones: [`docs/arquitectura.md`](docs/arquitectura.md),
@@ -62,18 +65,22 @@ Diagrama y decisiones: [`docs/arquitectura.md`](docs/arquitectura.md),
 | Spark Structured Streaming | Parseo, enriquecimiento, ventanas, KPIs y alertas |
 | Parquet + Data Lake | Persistencia por capas y reprocesamiento |
 | Python + `confluent-kafka` | Generación y publicación de eventos |
-| pytest | Pruebas de reglas, contrato y generador |
+| Apache Airflow 2.9.3 | Orquestación batch: quality gate, KPIs y reporte (Semana 3) |
+| pyarrow | Lectura Parquet en Airflow y fixture de demo |
+| pytest | Pruebas de reglas, contrato, generador, calidad y orquestación |
 | GitHub Actions | CI en push, PR y ejecución manual |
 
 ## Estructura del repositorio
 
 ```text
-.github/workflows/ci.yml        CI: sintaxis, contrato, pytest y compose
+.github/workflows/ci.yml        CI: sintaxis, contrato, pytest, Airflow y compose
 .github/workflows/release.yml   Release a partir de tags v*.*.*
-airflow/dags/                   DAGs (Semana 3)
+airflow/dags/                   DAG rapidgo_sla_semana3
+airflow/Dockerfile              Imagen Airflow + pyarrow
 datalake/                       Capas raw, processed y curated
 docs/                           Arquitectura, KPIs, ADR, checkpoints y evidencias
 producer/                       Generador de eventos y cliente Kafka
+semana3/                        Paquete de orquestación, calidad, reporting y fixture
 sla/                            Reglas puras, contrato y reporte de KPIs
 spark/                          Job streaming y demo batch
 tests/                          Pruebas automatizadas
@@ -167,28 +174,88 @@ python -m spark.batch_demo --input producer/sla_events_batch.json
 
 ```bash
 python -m pytest -v
-python -m compileall -q producer spark sla tests
+python -m compileall -q producer spark sla semana3 airflow/dags tests
 python -m sla.contract samples/sla_event.json \
   producer/sla_event_sample.json producer/sla_events_batch.json
 docker compose config --quiet
+docker compose -f docker-compose.yml -f docker-compose.semana3.yml config --quiet
 ```
 
 El workflow [`ci.yml`](.github/workflows/ci.yml) se ejecuta en `push`, `pull_request`
-hacia `main` y `workflow_dispatch`. Publica `reports/junit.xml` como artefacto y valida
-también la estructura mínima del repositorio.
+hacia `main` y `workflow_dispatch` y tiene tres jobs:
 
-## Airflow
+1. `calidad-codigo`: sintaxis, contrato, 67 pruebas y artefacto JUnit.
+2. `dag-airflow`: importa el DAG, ejecuta un run exitoso, provoca el fallo controlado,
+   verifica los estados `failed`/`upstream_failed` y ejecuta la recuperación.
+3. `validar-configuracion`: valida ambos compose, el contrato y la estructura del repo.
 
-La orquestación con Airflow corresponde a la Semana 3. El directorio `airflow/dags/`
-está reservado para el DAG de calidad, agregación y reporte.
+## Ejecución con Airflow (Semana 3)
+
+El DAG `rapidgo_sla_semana3` tiene 6 tareas, `schedule=None`, `retries=2` y XCom para
+transportar solo rutas y conteos:
+
+```text
+validar_fuente -> perfilar_datos -> validar_calidad
+-> calcular_indicadores -> generar_reporte -> publicar_resultado
+```
+
+Levantar Airflow (Airflow 2.9.3 + pyarrow) junto con el compose base:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.semana3.yml up -d --build airflow
+# UI: http://localhost:8088  (admin / admin, solo demo local)
+```
+
+Ejecutar el DAG:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.semana3.yml \
+  exec -T airflow airflow dags test rapidgo_sla_semana3 2026-11-01
+```
+
+Sin Airflow también se pueden correr las mismas tareas:
+
+```bash
+python -m semana3.sample_data \
+  --input producer/sla_events_batch.json --output datalake --overwrite
+python -m semana3.orchestration --lake datalake --reports reports
+```
+
+Fallo controlado y recuperación:
+
+```bash
+# Provoca el fallo del quality gate
+touch airflow/flags/forzar_fallo_calidad
+docker compose -f docker-compose.yml -f docker-compose.semana3.yml \
+  exec -T airflow airflow dags test rapidgo_sla_semana3 2026-11-06
+
+# Recuperación: retirar la bandera y lanzar un run nuevo
+rm airflow/flags/forzar_fallo_calidad
+docker compose -f docker-compose.yml -f docker-compose.semana3.yml \
+  exec -T airflow airflow dags test rapidgo_sla_semana3 2026-11-07
+```
+
+Un fallo de `validar_calidad` deja `calcular_indicadores`, `generar_reporte` y
+`publicar_resultado` en `upstream_failed`; no se publica un reporte parcial. La tarea de
+calidad usa `retries=0` porque reintentar no corrige un dato inválido.
+
+Detalle: [`docs/checkpoints/semana3.md`](docs/checkpoints/semana3.md),
+[`docs/evidencias/semana3.md`](docs/evidencias/semana3.md) y
+[`docs/decisions/ADR-003-orquestacion-y-recuperacion.md`](docs/decisions/ADR-003-orquestacion-y-recuperacion.md).
 
 ## Evidencias
 
-- Checkpoint: [`docs/checkpoints/semana2.md`](docs/checkpoints/semana2.md)
+- Checkpoint Semana 3: [`docs/checkpoints/semana3.md`](docs/checkpoints/semana3.md)
+- Evidencia Semana 3: [`docs/evidencias/semana3.md`](docs/evidencias/semana3.md)
+- ADR-003: [`docs/decisions/ADR-003-orquestacion-y-recuperacion.md`](docs/decisions/ADR-003-orquestacion-y-recuperacion.md)
+- Notas de release: [`docs/releases/v0.3.0-orchestration.md`](docs/releases/v0.3.0-orchestration.md)
+- Checkpoint Semana 2: [`docs/checkpoints/semana2.md`](docs/checkpoints/semana2.md)
 - Evidencia de ejecución: [`docs/evidencias/semana2.md`](docs/evidencias/semana2.md)
 - ADR-002: [`docs/decisions/ADR-002-ventana-watermark-checkpoints.md`](docs/decisions/ADR-002-ventana-watermark-checkpoints.md)
+- Release `v0.3.0-orchestration` (pre-release): [releases/tag/v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
 - Actions: pestaña **Actions → CI RapidGo** del repositorio.
-  - CI en verde (PR): [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
+  - Semana 3 en verde (PR #25): [run 42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397)
+  - CI en verde Semana 2 (PR): [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
   - Fallo controlado: [run 40985829295](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985829295)
   - Ejecución manual: [run 40985938802](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985938802)
 - Actividad de transferencia de GitHub Actions: [`docs/actions/actividad_transferencia.md`](docs/actions/actividad_transferencia.md)
@@ -201,7 +268,10 @@ está reservado para el DAG de calidad, agregación y reporte.
   descargar el conector Kafka-Spark desde Maven.
 - La escritura Parquet local en Windows requiere `winutils.exe`; en Docker/Linux funciona
   sin pasos adicionales.
-- Airflow, el video final y el release `v1.0.0` corresponden a las semanas 3 y 4.
+- Airflow (Semana 3) ya está implementado; el video final y el release `v1.0.0`
+  corresponden a la Semana 4.
+- La entrega de la Semana 3 queda en la rama `feature/semana3-orquestacion`: no se hace
+  merge a `main` en esta entrega.
 
 ## Contribuciones
 
@@ -209,4 +279,4 @@ está reservado para el DAG de calidad, agregación y reporte.
 |---|---|---|---|
 | Andrés Morales | Producer y contrato | #4 | #16 |
 | Julián Pérez | Kafka, Spark y Data Lake | #5, #6 | #17 |
-| Kevin García | KPIs, alertas, pruebas y CI | #3, #6 | #18, #19 |
+| Kevin García | KPIs, alertas, pruebas, CI y Semana 3 | #3, #6, #7, #8, #9 | #18, #19, #21–#24 |

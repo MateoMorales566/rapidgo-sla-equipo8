@@ -1,9 +1,11 @@
 # Dependencias de runtime y CI del proyecto RapidGo SLA
-# (Kafka, validación de contrato y pruebas; Spark va en requirements-spark.txt)
+# (Kafka, validación de contrato, lectura Parquet y pruebas;
+#  PySpark va en requirements-spark.txt y Airflow en requirements-airflow.txt)
 
 confluent-kafka>=2.3.0
 jsonschema[format]>=4.20.0
 python-dotenv>=1.0.0
+pyarrow==16.1.0
 
 # Testing / GitHub Actions
 pytest>=7.4.0
