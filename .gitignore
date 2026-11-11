@@ -13,6 +13,10 @@ Guia_Introduccion_GitHub_Actions_Python-1.pdf
 datalake/raw/*
 datalake/processed/*
 datalake/curated/*
+!datalake/curated/kpis/
+!datalake/curated/alerts/
+datalake/curated/kpis/*
+datalake/curated/alerts/*
 datalake/**/_checkpoints/
 !datalake/**/.gitkeep
 

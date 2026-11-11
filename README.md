@@ -52,7 +52,8 @@ producer/ (confluent-kafka, key=order_id, team_id=equipo8)
       -> reports/sla_semana3_latest.json
 ```
 
-Diagrama y decisiones: [`docs/arquitectura.md`](docs/arquitectura.md),
+Arquitectura y decisiones: [`docs/arquitectura.md`](docs/arquitectura.md),
+[`docs/arquitectura.png`](docs/arquitectura.png),
 [`docs/arquitectura.svg`](docs/arquitectura.svg) y
 [`docs/decisions/ADR-001-kafka-sla.md`](docs/decisions/ADR-001-kafka-sla.md).
 
@@ -77,13 +78,36 @@ Diagrama y decisiones: [`docs/arquitectura.md`](docs/arquitectura.md),
 .github/workflows/release.yml   Release a partir de tags v*.*.*
 airflow/dags/                   DAG rapidgo_sla_semana3
 airflow/Dockerfile              Imagen Airflow + pyarrow
-datalake/                       Capas raw, processed y curated
-docs/                           Arquitectura, KPIs, ADR, checkpoints y evidencias
+airflow/flags/                  Bandera del fallo controlado de calidad
+datalake/raw/                   Mensaje original de Kafka en Parquet
+datalake/processed/             Evento parseado y enriquecido
+datalake/curated/kpis/          Agregación por ventana y zona
+datalake/curated/alerts/        SLA_EXCEEDED y DELIVERY_STOPPED
+docs/arquitectura.md            Arquitectura y decisiones de diseño
+docs/arquitectura.png           Diagrama para informes y presentación
+docs/arquitectura.svg           Diagrama vectorial
+docs/contrato_evento.json       Contrato JSON del evento
+docs/kpis_alertas.md            KPIs, umbrales y reglas de alerta
+docs/actions/                   Actividad de transferencia de GitHub Actions
+docs/checkpoints/               Checkpoints de las semanas 1 a 3
+docs/decisions/                 ADR-001, ADR-002 y ADR-003
+docs/evidencias/                Evidencias de ejecución de las semanas 2 y 3
+docs/releases/                  Notas de release de v0.1.0, v0.2.0 y v0.3.0
 producer/                       Generador de eventos y cliente Kafka
-semana3/                        Paquete de orquestación, calidad, reporting y fixture
+samples/                        Evento de muestra del contrato
+semana3/                        Orquestación, calidad, reporting y fixture
 sla/                            Reglas puras, contrato y reporte de KPIs
 spark/                          Job streaming y demo batch
-tests/                          Pruebas automatizadas
+tests/                          67 pruebas automatizadas
+docker-compose.yml              Kafka, Spark y producer
+docker-compose.semana3.yml      Overlay de Airflow
+requirements.txt                Dependencias base y de CI
+requirements-airflow.txt        Airflow 2.9.3 y pyarrow
+requirements-spark.txt          PySpark para ejecución local
+pytest.ini                      Configuración de pytest (pythonpath)
+README.md                       Documentación principal
+.gitignore                      Exclusiones de datos y entornos
+.dockerignore                   Contexto de build de Docker
 ```
 
 ## Ejecución con Docker
