@@ -31,8 +31,8 @@ alertas listas para consulta y para la orquestación de la Semana 3.
 | Release | Semana | Estado |
 |---|---|---|
 | `v0.1.0-foundation` | 1 | ✅ Publicado |
-| `v0.2.0-streaming` | 2 | ✅ Implementado y validado en CI en la rama `feature/semana2-pipeline-ci`; el tag se crea desde `main` después del merge |
-| `v0.3.0-orchestration` | 3 | ✅ Pre-release publicado desde la rama `feature/semana3-orquestacion` (sin merge a `main`) |
+| `v0.2.0-streaming` | 2 | ✅ Publicado |
+| `v0.3.0-orchestration` | 3 | ✅ Publicado e integrado a `main` por el PR #25 |
 | `v1.0.0` | 4 | ⏳ Release final y video |
 
 ## Arquitectura
@@ -245,14 +245,17 @@ Detalle: [`docs/checkpoints/semana3.md`](docs/checkpoints/semana3.md),
 
 ## Evidencias
 
+- Checkpoint Semana 1: [`docs/checkpoints/semana1.md`](docs/checkpoints/semana1.md)
 - Checkpoint Semana 3: [`docs/checkpoints/semana3.md`](docs/checkpoints/semana3.md)
 - Evidencia Semana 3: [`docs/evidencias/semana3.md`](docs/evidencias/semana3.md)
 - ADR-003: [`docs/decisions/ADR-003-orquestacion-y-recuperacion.md`](docs/decisions/ADR-003-orquestacion-y-recuperacion.md)
-- Notas de release: [`docs/releases/v0.3.0-orchestration.md`](docs/releases/v0.3.0-orchestration.md)
 - Checkpoint Semana 2: [`docs/checkpoints/semana2.md`](docs/checkpoints/semana2.md)
-- Evidencia de ejecución: [`docs/evidencias/semana2.md`](docs/evidencias/semana2.md)
+- Evidencia Semana 2: [`docs/evidencias/semana2.md`](docs/evidencias/semana2.md)
 - ADR-002: [`docs/decisions/ADR-002-ventana-watermark-checkpoints.md`](docs/decisions/ADR-002-ventana-watermark-checkpoints.md)
-- Release `v0.3.0-orchestration` (pre-release): [releases/tag/v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
+- Notas de release: [`v0.1.0-foundation`](docs/releases/v0.1.0-foundation.md),
+  [`v0.2.0-streaming`](docs/releases/v0.2.0-streaming.md) y
+  [`v0.3.0-orchestration`](docs/releases/v0.3.0-orchestration.md).
+- Release `v0.3.0-orchestration`: [releases/tag/v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
 - Actions: pestaña **Actions → CI RapidGo** del repositorio.
   - Semana 3 en verde (PR #25): [run 42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397)
   - CI en verde Semana 2 (PR): [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
@@ -268,15 +271,16 @@ Detalle: [`docs/checkpoints/semana3.md`](docs/checkpoints/semana3.md),
   descargar el conector Kafka-Spark desde Maven.
 - La escritura Parquet local en Windows requiere `winutils.exe`; en Docker/Linux funciona
   sin pasos adicionales.
-- Airflow (Semana 3) ya está implementado; el video final y el release `v1.0.0`
-  corresponden a la Semana 4.
-- La entrega de la Semana 3 queda en la rama `feature/semana3-orquestacion`: no se hace
-  merge a `main` en esta entrega.
+- Airflow (Semana 3) ya está implementado e integrado a `main`; el video final y el
+  release `v1.0.0` corresponden a la Semana 4.
 
 ## Contribuciones
 
-| Integrante | Responsabilidad | Issues | PRs principales |
+| Integrante | Responsabilidad | Issues asignados | PRs abiertos |
 |---|---|---|---|
-| Andrés Morales | Producer y contrato | #4 | #16 |
-| Julián Pérez | Kafka, Spark y Data Lake | #5, #6 | #17 |
-| Kevin García | KPIs, alertas, pruebas, CI y Semana 3 | #3, #6, #7, #8, #9 | #18, #19, #21–#24 |
+| Andrés Morales | Producer y contrato | #1, #4, #7, #13 | #15, #17, #23 |
+| Julián Pérez | Kafka, Spark y Data Lake | #2, #5, #9 | #14, #18, #22, #24 |
+| Kevin García | KPIs, alertas, pruebas, CI y Semana 3 | #3, #6, #8 | #16, #19, #20, #21, #25 |
+
+La autoría de los commits dentro de cada PR puede incluir aportes de otros integrantes;
+el detalle queda en el historial de cada rama.
