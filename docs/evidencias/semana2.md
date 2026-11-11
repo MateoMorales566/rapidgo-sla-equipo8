@@ -122,8 +122,9 @@ Evidencia esperada: 3 particiones en el topic, eventos del producer, archivos Pa
 ## 7. CI en GitHub Actions
 
 El workflow `CI RapidGo` (`.github/workflows/ci.yml`) se ejecuta en `push`,
-`pull_request` hacia `main` y `workflow_dispatch`. Dos jobs: **Sintaxis, contrato y
-pruebas** y **Docker Compose y archivos del proyecto**.
+`pull_request` hacia `main` y `workflow_dispatch`. En la fecha de este documento tenía
+dos jobs, **Sintaxis, contrato y pruebas** y **Docker Compose y archivos del proyecto**;
+la Semana 3 agregó un tercero para el DAG.
 
 | Escenario | Commit | Run |
 |---|---|---|
