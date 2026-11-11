@@ -4,6 +4,10 @@ Esta actividad traduce la guía de GitHub Actions al proyecto RapidGo, variante 
 (SLA de entregas). No se copió el caso StockGuard: se usó su mecanismo para definir
 checks propios del equipo.
 
+> Documento de la Semana 2 (29/10/2026). Los conteos de pruebas y de jobs de CI
+> corresponden a esa fecha; la suite creció después a 67 pruebas y el workflow a tres
+> jobs en la Semana 3.
+
 ## 1. Regla de negocio propia
 
 ```python

@@ -182,8 +182,8 @@ El workflow `CI RapidGo` tiene tres jobs:
 
 Los enlaces de la ejecución de la rama:
 
-- PR draft: [#25](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/25)
+- PR mergeado: [#25](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/25) (06/11/2026)
 - CI completo en verde: [run 42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397)
 - Job del DAG (importación, fallo controlado y recuperación): [job 127663010836](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397/job/127663010836)
-- Pre-release: [v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
+- Release: [v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
 - Workflow de release: [run 42148261466](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42148261466)
