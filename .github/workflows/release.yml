@@ -18,10 +18,25 @@ jobs:
     name: Publicar GitHub Release
     runs-on: ubuntu-latest
     steps:
+    
       - name: Descargar repositorio
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Quality Gate previo al release
+        run: |
+          python -m compileall producer spark tests airflow scripts
+          pytest -q
+          python scripts/quality_gate.py
 
       - name: Crear release con notas automáticas
         env:
