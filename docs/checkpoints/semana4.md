@@ -25,13 +25,14 @@ El repositorio quedó ejecutable de punta a punta con Docker y también en local
 | [#32](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/32) | Python 3.12 alineado con el CI para publicar el artefacto | `68b141d` |
 | [#33](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/33) | Enlace al tablero Kanban | `234cad3` |
 | [#34](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/34) | Unificación de `requirements.txt` | `6d1f284` |
+| [#35](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/35) | Cierre documental y guía de publicación del video | `4a53d7b` |
 
 El PR #30 eliminó `semana3/` y `docker-compose.semana3.yml`, consolidó
 `docs/evidencias.md` y `docs/releases.md` y agregó `scripts/quality_gate.py`. El PR #34
 dejó un solo archivo de dependencias con cuatro bloques (base, pruebas, Airflow y Spark) y
-cada contexto instala el grupo que necesita.
+cada contexto instala el grupo que necesita. El PR #35 cerró el README y este checkpoint.
 
-## 3. Verificación local (2026-11-13, sobre `main` `6d1f284`)
+## 3. Verificación local (2026-11-13, sobre `main`)
 
 | Comprobación | Resultado |
 |---|---|
@@ -43,7 +44,25 @@ cada contexto instala el grupo que necesita.
 | Enlaces internos de la documentación | 0 rotos |
 | `python -m sla.reporting samples/sla_events_batch.json` | 120 eventos, 25 entregas, 36.56 min, 12.00 % fuera de SLA |
 
-## 4. Release
+## 4. Verificación en clon limpio
+
+Se clonó el repositorio en una carpeta temporal y se siguió el README sin estado previo:
+
+```text
+Clon:           4a53d7b
+Python:         3.13.14 (venv nuevo)
+Instalación:    grupo base de requirements.txt (pyarrow 26.0.1)
+pytest -q:      70 passed
+producer:       120 eventos generados en reports/sla_events_batch.json
+sla.contract:   1 + 120 eventos válidos
+sla.reporting:  25 entregas, 36.56 min, 12.00 % fuera de SLA
+compose config: exit 0
+```
+
+La instalación completa (`pip install -r requirements.txt`) exige Python 3.11 o 3.12 por
+Airflow 2.9.3; en 3.13 se documenta el grupo base, que es el que usó esta verificación.
+
+## 5. Release
 
 ```text
 Tag:      v1.0.0
@@ -54,21 +73,21 @@ Publicado: 2026-11-13
 ```
 
 El ZIP se generó desde el contenido del tag, no desde `main`. Como `main` avanzó después
-con el PR #34 (`6d1f284`), el artefacto publicado no incluye la unificación de dependencias;
-el tag y el ZIP siguen correspondiendo a la misma versión.
+con los PRs #34 y #35, el artefacto publicado no incluye esos cambios; el tag y el ZIP
+siguen correspondiendo a la misma versión.
 
-## 5. Estado de la entrega
+## 6. Estado de la entrega
 
 | Requisito | Estado |
 |---|---|
 | Release final `v1.0.0` publicado y con artefacto | ✅ |
-| Repositorio ejecutable según el README | ✅ |
-| CI en verde sobre `main` (`6d1f284`) | ✅ |
-| Tablero Kanban enlazado y 13 issues cerrados | ✅ |
+| Repositorio ejecutable según el README, verificado en clon limpio | ✅ |
+| CI en verde sobre el commit del tag y sobre `main` | ✅ |
+| Tablero Kanban con las 13 tarjetas en DONE | ✅ |
 | Documentación por semanas y ADR | ✅ |
 | Video final de hasta 10 minutos | ❌ Pendiente |
 
-## 6. Pendiente: video final
+## 7. Pendiente: video final
 
 El video es el único entregable de contenido pendiente. No se versiona en el repositorio.
 
@@ -82,13 +101,17 @@ El video es el único entregable de contenido pendiente. No se versiona en el re
 El guion y el plan de grabación se guardan fuera del repositorio, junto con el resto del
 material de la Semana 4.
 
-## 7. Trazabilidad
+## 8. Trazabilidad
 
 - Issues: 13 de 13 cerrados; el tablero público es
-  [RapidGo - Equipo 8 - SLA de entregas](https://github.com/users/MateoMorales566/projects/1).
-- CI final: [run 43457040585](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43457040585)
-  sobre `6d1f284`.
-- Requirements unificados: [run 43456837016](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43456837016).
+  [RapidGo - Equipo 8 - SLA de entregas](https://github.com/users/MateoMorales566/projects/1)
+  y las 13 tarjetas están en la columna DONE.
+- CI sobre el commit del tag: [run 43357687727](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43357687727).
+- CI sobre `main` en el merge del PR #35: [run 43459069626](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43459069626)
+  sobre `4a53d7b`.
+- Ejecución manual de `NyawToo`: [run 43460938070](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43460938070).
+- Ejecución manual de `SantiagoG1309`: [run 43357845590](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43357845590).
+- Revisiones cruzadas: PRs #29, #30 y #34 aprobados por `NyawToo`.
 - Release: [run 43357711364](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43357711364).
 - Evidencias: [`docs/evidencias.md`](../evidencias.md) y
   [`docs/releases.md`](../releases.md).

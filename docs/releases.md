@@ -236,9 +236,9 @@ Calidad: 0 filas inválidas, 0 duplicados
 ### Estado
 
 Publicado. Tag y GitHub Release `v1.0.0` creados sobre el merge `234cad3` (PR #33,
-2026-11-13) con el ZIP del repositorio adjunto por `release.yml`. `main` avanzó dos commits
-después del tag con el PR #34, que unificó las dependencias en un solo `requirements.txt`;
-el artefacto del release sigue correspondiendo al contenido del tag.
+2026-11-13) con el ZIP del repositorio adjunto por `release.yml`. `main` avanzó cuatro
+commits después del tag con los PRs #34 (requirements unificados) y #35 (cierre
+documental); el artefacto del release sigue correspondiendo al contenido del tag.
 
 El video final no forma parte del repositorio: es el único entregable de contenido pendiente
 del equipo y debe enlazarse desde este release y desde el README. Los pasos están en
