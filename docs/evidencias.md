@@ -337,3 +337,43 @@ Los enlaces de la ejecución de la rama:
 - Job del DAG (importación, fallo controlado y recuperación): [job 127663010836](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397/job/127663010836)
 - Release: [v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
 - Workflow de release: [run 42148261466](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42148261466)
+
+## Semana 4 - Integración, Quality Gate y release
+
+Rama: `feature/optimizacion-estructura`  
+Fecha: 2026-11-12
+
+### 17. Estructura final y verificaciones
+
+```text
+$ python -m pytest -q
+......................................................................   [100%]
+70 passed
+
+$ python -m compileall -q producer spark sla airflow/dags tests scripts
+exit 0
+
+$ python -m sla.contract samples/sla_event.json samples/sla_events_batch.json
+OK samples/sla_event.json: 1 evento(s) válido(s)
+OK samples/sla_events_batch.json: 120 evento(s) válido(s)
+
+$ python scripts/quality_gate.py
+QUALITY GATE: OK
+
+$ docker compose config --quiet
+exit 0
+```
+
+El Quality Gate exige README completo, los servicios `kafka`, `spark-job` y `airflow` en
+el compose, el paquete `sla/`, los tres ADR, los tres checkpoints y un DAG con al menos 5
+tareas. También se empaqueta `reports/rapidgo-sla-equipo8.zip` como artefacto de release.
+
+### 18. CI y PR
+
+- PR de integración: [#30](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/30)
+- CI en `push`: [run 43349476278](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349476278)
+- CI en `pull_request`: [run 43349505174](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349505174)
+
+Los tres jobs terminaron en `success`: `calidad-codigo`, `dag-airflow` y
+`validar-configuracion`.
+
