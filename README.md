@@ -389,8 +389,8 @@ adicionales al topic:
 
 ## Video final
 
-Es el único entregable abierto. Dura como máximo 10 minutos, no se versiona en el
-repositorio y se enlaza desde el release `v1.0.0` y desde esta sección.
+Es el único entregable de contenido que falta. Dura como máximo 10 minutos, no se versiona
+en el repositorio y se enlaza desde el release `v1.0.0` y desde esta sección.
 
 Contenido previsto, en orden:
 

@@ -240,6 +240,6 @@ Publicado. Tag y GitHub Release `v1.0.0` creados sobre el merge `234cad3` (PR #3
 después del tag con el PR #34, que unificó las dependencias en un solo `requirements.txt`;
 el artefacto del release sigue correspondiendo al contenido del tag.
 
-El video final no forma parte del repositorio: es el único pendiente del equipo y debe
-enlazarse desde este release y desde el README. Los pasos están en
+El video final no forma parte del repositorio: es el único entregable de contenido pendiente
+del equipo y debe enlazarse desde este release y desde el README. Los pasos están en
 [`docs/checkpoints/semana4.md`](checkpoints/semana4.md).

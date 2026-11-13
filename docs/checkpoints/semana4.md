@@ -70,7 +70,7 @@ el tag y el ZIP siguen correspondiendo a la misma versión.
 
 ## 6. Pendiente: video final
 
-El video es el único entregable abierto. No se versiona en el repositorio.
+El video es el único entregable de contenido pendiente. No se versiona en el repositorio.
 
 1. Grabar la demo (máximo 10 minutos): problema, arquitectura, Docker/Kafka/Spark/Data
    Lake/Airflow con el fallo controlado y la recuperación, recorrido por GitHub y
