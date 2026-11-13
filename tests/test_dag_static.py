@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DAG_PATH = ROOT / "airflow" / "dags" / "rapidgo_sla_orchestration.py"
-ORCHESTRATION_PATH = ROOT / "semana3" / "orchestration.py"
+ORCHESTRATION_PATH = ROOT / "sla" / "orchestration.py"
 
 EXPECTED_TASKS = {
     "validar_fuente",
@@ -66,10 +66,10 @@ def test_tasks_use_xcom_and_import_from_package():
     dag_source = DAG_PATH.read_text(encoding="utf-8")
 
     assert "xcom_pull" in source
-    assert "from semana3.orchestration import" in dag_source
-    assert "semana3.andres" not in dag_source
-    assert "semana3.julian" not in dag_source
-    assert "semana3.kevin" not in dag_source
+    assert "from sla.orchestration import" in dag_source
+    assert "sla.andres" not in dag_source
+    assert "sla.julian" not in dag_source
+    assert "sla.kevin" not in dag_source
 
 
 def test_failure_flag_is_documented():

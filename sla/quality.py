@@ -13,7 +13,7 @@ from typing import Any, Iterable, Sequence
 
 from sla.rules import TEAM_ID, VALID_STATUSES, parse_timestamp
 
-from semana3.config import max_invalid_ratio
+from sla.config import max_invalid_ratio
 
 REQUIRED_COLUMNS = frozenset(
     {

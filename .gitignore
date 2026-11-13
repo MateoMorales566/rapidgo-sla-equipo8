@@ -20,7 +20,7 @@ datalake/curated/alerts/*
 datalake/**/_checkpoints/
 !datalake/**/.gitkeep
 
-# Airflow (Semana 3)
+# Airflow
 airflow/logs/
 airflow/airflow.db
 airflow/airflow.cfg

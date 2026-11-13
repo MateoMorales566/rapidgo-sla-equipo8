@@ -6,14 +6,14 @@ from pathlib import Path
 
 import pytest
 
-from semana3.orchestration import (
+from sla.orchestration import (
     TASK_IDS,
     _FakeTI,
     quality_gate,
     run_pipeline,
     validate_source,
 )
-from semana3.quality import inspect_parquet
+from sla.quality import inspect_parquet
 
 
 def test_validate_source_requires_processed(tmp_path, monkeypatch):

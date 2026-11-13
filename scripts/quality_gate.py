@@ -4,6 +4,9 @@ Verifica que el repositorio tenga lo mínimo para liberar v1.0.0.
 Uso: python scripts/quality_gate.py
 Código de salida 0 = OK, 1 = falla (el release no debe crearse).
 """
+
+from __future__ import annotations
+
 import re
 import sys
 from pathlib import Path
@@ -12,18 +15,40 @@ REQUIRED_PATHS = [
     "README.md",
     "docker-compose.yml",
     "requirements.txt",
+    "requirements-airflow.txt",
     ".github/workflows/ci.yml",
+    ".github/workflows/release.yml",
     "producer",
     "spark",
+    "sla",
     "tests",
-    "samples",
+    "samples/sla_event.json",
     "airflow/dags",
+    "datalake/README.md",
+    "docs/arquitectura.png",
+    "docs/contrato_evento.json",
+    "docs/kpis_alertas.md",
     "docs/checkpoints/semana1.md",
     "docs/checkpoints/semana2.md",
     "docs/checkpoints/semana3.md",
+    "docs/evidencias.md",
+    "docs/releases.md",
+    "scripts/quality_gate.py",
 ]
 
-README_KEYWORDS = ["Kafka", "Spark", "Airflow", "KPI", "Docker"]
+README_KEYWORDS = [
+    "Kafka",
+    "Spark",
+    "Airflow",
+    "KPI",
+    "Docker",
+    "Instalación",
+    "Ejecución",
+    "Resultados",
+    "Responsables",
+]
+
+COMPOSE_SERVICES = ["kafka", "spark-job", "airflow"]
 MIN_ADRS = 3
 MIN_DAG_TASKS = 5
 
@@ -41,6 +66,13 @@ def check_all(root: Path) -> list:
         for kw in README_KEYWORDS:
             if kw.lower() not in text.lower():
                 errors.append(f"README no menciona '{kw}'")
+
+    compose = root / "docker-compose.yml"
+    if compose.exists():
+        text = compose.read_text(encoding="utf-8", errors="ignore")
+        for service in COMPOSE_SERVICES:
+            if not re.search(rf"^\s{{2}}{re.escape(service)}:", text, flags=re.MULTILINE):
+                errors.append(f"docker-compose.yml no define el servicio '{service}'")
 
     decisions = root / "docs" / "decisions"
     adrs = list(decisions.glob("ADR-*.md")) if decisions.exists() else []
@@ -67,8 +99,8 @@ def main() -> int:
     errors = check_all(root)
     if errors:
         print("QUALITY GATE: FALLO")
-        for e in errors:
-            print(f" - {e}")
+        for error in errors:
+            print(f" - {error}")
         return 1
     print("QUALITY GATE: OK")
     return 0

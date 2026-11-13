@@ -19,7 +19,8 @@
 6. **Airflow** ejecuta un DAG batch bajo demanda (`schedule=None`) sobre `processed`:
    valida fuente, perfila datos, aplica quality gate, calcula KPIs, escribe un reporte
    atómico y publica un resumen. No reinicia Spark ni toca checkpoints.
-7. La Semana 4 integrará el quality gate final y el release `v1.0.0`.
+7. La Semana 4 consolida el paquete `sla/`, el Quality Gate previo al release y el
+   pipeline completo en un único `docker-compose.yml`.
 
 ```text
 producer -> Kafka (3 particiones, key=order_id)
@@ -28,7 +29,7 @@ producer -> Kafka (3 particiones, key=order_id)
   -> Airflow (batch, schedule=None)
        -> validar_fuente -> perfilar_datos -> validar_calidad
        -> calcular_indicadores -> generar_reporte -> publicar_resultado
-  -> reports/sla_semana3_latest.json
+  -> reports/sla_latest.json
 ```
 
 ## Componentes
@@ -39,18 +40,17 @@ producer -> Kafka (3 particiones, key=order_id)
 | Simulador | `producer/events.py` | Genera eventos válidos y lotes reproducibles |
 | Reglas | `sla/rules.py` | KPIs y alertas sin Spark/Kafka |
 | Contrato | `sla/contract.py` | Validación JSON Schema |
-| Reporte de lote | `sla/report.py` | KPIs y alertas de un lote JSON |
+| Reporte y reporting batch | `sla/reporting.py` | KPIs, alertas y escritura atómica |
 | Transformaciones | `spark/transforms.py` | Parseo, enriquecimiento y agregaciones |
 | Streaming | `spark/streaming_job.py` | `writeStream` a raw, processed y curated |
 | Demo batch Spark | `spark/batch_demo.py` | Mismas transformaciones sin Kafka |
 | DAG | `airflow/dags/rapidgo_sla_orchestration.py` | Conecta las 6 tareas de Airflow |
-| Configuración | `semana3/config.py` | Rutas `RAPIDGO_*` y umbral de calidad |
-| Calidad | `semana3/quality.py` | Perfilado Parquet y quality gate |
-| Reporting | `semana3/reporting.py` | KPIs, alertas y escritura atómica |
-| Orquestación | `semana3/orchestration.py` | Funciones de las tasks y runner local |
-| Fixture | `semana3/sample_data.py` | Genera `processed` Parquet para demo/CI |
-| Infraestructura | `docker-compose.yml` | Kafka, topic, producer y Spark |
-| Airflow | `docker-compose.semana3.yml` + `airflow/Dockerfile` | Airflow 2.9.3 + pyarrow |
+| Configuración | `sla/config.py` | Rutas `RAPIDGO_*` y umbral de calidad |
+| Calidad | `sla/quality.py` | Perfilado Parquet y quality gate |
+| Orquestación | `sla/orchestration.py` | Funciones de las tasks y runner local |
+| Fixture | `sla/sample_data.py` | Genera `processed` Parquet para demo/CI |
+| Infraestructura | `docker-compose.yml` | Kafka, topic, producer, Spark y Airflow |
+| Airflow | `airflow/Dockerfile` | Airflow 2.9.3 + pyarrow |
 
 ## Campos mínimos
 
@@ -106,11 +106,9 @@ docker compose exec kafka kafka-topics \
 docker compose exec spark-job find /opt/rapidgo/datalake -name "*.parquet" | head
 
 # DAG y runs
-docker compose -f docker-compose.yml -f docker-compose.semana3.yml \
-  exec -T airflow airflow dags list
-docker compose -f docker-compose.yml -f docker-compose.semana3.yml \
-  exec -T airflow airflow dags list-runs -d rapidgo_sla_semana3
+docker compose exec -T airflow airflow dags list
+docker compose exec -T airflow airflow dags list-runs -d rapidgo_sla_semana3
 
 # Reporte generado
-cat reports/sla_semana3_latest.json
+cat reports/sla_latest.json
 ```

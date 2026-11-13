@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from semana3.sample_data import build_processed_rows, write_processed
+from sla.sample_data import build_processed_rows, write_processed
 
 
 @pytest.fixture

@@ -56,10 +56,10 @@ sin volver a publicar en Kafka. Para un reprocesamiento completo:
 Para probar el DAG sin levantar Kafka/Spark:
 
 ```bash
-python -m semana3.sample_data \
-  --input producer/sla_events_batch.json \
+python -m sla.sample_data \
+  --input samples/sla_events_batch.json \
   --output datalake --overwrite
-python -m semana3.orchestration --lake datalake --reports reports
+python -m sla.orchestration --lake datalake --reports reports
 ```
 
 Esto escribe `datalake/processed/part-00000.parquet` con el mismo esquema enriquecido y
@@ -81,6 +81,6 @@ alerts.groupBy("alert_code", "severity").count().show()
 ## Nota sobre Windows
 
 La escritura Parquet local con Spark requiere `winutils.exe` y `HADOOP_HOME`. En
-Docker/Linux no se necesita nada adicional. El generador `semana3.sample_data` usa
+Docker/Linux no se necesita nada adicional. El generador `sla.sample_data` usa
 `pyarrow` y sí funciona en Windows, por lo que sirve como fixture para la demo de
 Airflow.

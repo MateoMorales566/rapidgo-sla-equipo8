@@ -2,7 +2,7 @@
 
 Airflow solo aporta el scheduler, los retries y la interfaz visual. La lógica
 vive aquí para poder probarla con pytest y ejecutarla con
-``python -m semana3.orchestration`` sin levantar Airflow.
+``python -m sla.orchestration`` sin levantar Airflow.
 """
 
 from __future__ import annotations
@@ -15,10 +15,9 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from semana3.config import quality_failure_flag
-from semana3.quality import evaluate_quality, inspect_parquet, resolve_parquet_paths
-from semana3.reporting import build_report, read_report, save_report, summarize_sla
-from semana3.config import datalake_path, reports_path
+from sla.config import datalake_path, quality_failure_flag, reports_path
+from sla.quality import evaluate_quality, inspect_parquet, resolve_parquet_paths
+from sla.reporting import build_pipeline_report, read_report, save_report, summarize_sla
 
 TASK_IDS = (
     "validar_fuente",
@@ -106,7 +105,7 @@ def write_report(ti: Any) -> dict[str, Any]:
     if metrics is None or quality is None or source is None:
         raise ValueError("No están los XCom necesarios para generar el reporte")
 
-    report = build_report(
+    report = build_pipeline_report(
         metrics=metrics,
         quality=quality,
         source_files=source["processed_paths"],

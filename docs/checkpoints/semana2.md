@@ -20,11 +20,11 @@ Se completó el núcleo del pipeline de la variante 1 (SLA de entregas):
 | `python -m pytest -q` | `38 passed` |
 | `python -m compileall producer spark sla tests` | exit 0 |
 | `python -m sla.contract ...` | 120 eventos válidos |
-| `python -m sla.report producer/sla_events_batch.json` | 25 entregas, promedio **36.56 min**, **12.00 %** fuera de SLA, 3 alertas `SLA_EXCEEDED`, 3 `DELIVERY_STOPPED` |
+| `python -m sla.reporting samples/sla_events_batch.json` | 25 entregas, promedio **36.56 min**, **12.00 %** fuera de SLA, 3 alertas `SLA_EXCEEDED`, 3 `DELIVERY_STOPPED` |
 | `python -m spark.batch_demo ...` | 120 eventos, ventanas de 15 min, 6 alertas únicas |
 | `docker compose config --quiet` | exit 0 |
 
-El detalle de comandos y salidas está en [`docs/evidencias/semana2.md`](../evidencias/semana2.md).
+El detalle de comandos y salidas está en [`docs/evidencias.md`](../evidencias.md).
 
 ## 3. Decisión técnica tomada
 

@@ -29,7 +29,7 @@ reprocesar sin duplicar datos.
 
 ## Evidencia utilizada
 
-Ejecución del lote reproducible de 120 eventos (`producer/sla_events_batch.json`):
+Ejecución del lote reproducible de 120 eventos (`samples/sla_events_batch.json`):
 
 ```text
 Pedidos entregados: 25
