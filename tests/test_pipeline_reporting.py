@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 
-from semana3.reporting import (
-    build_report,
+from sla.reporting import (
+    build_pipeline_report,
     read_report,
     save_report,
     summarize_records,
@@ -57,7 +57,7 @@ def test_summarize_sla_from_processed_parquet(sample_lake):
 
 
 def test_report_is_written_atomically(tmp_path):
-    report = build_report(
+    report = build_pipeline_report(
         metrics={"pedidos_unicos": 3},
         quality={"passed": True},
         source_files=["a.parquet"],
@@ -71,7 +71,7 @@ def test_report_is_written_atomically(tmp_path):
 
 def test_report_content_is_json_serializable(tmp_path):
     output = save_report(
-        build_report(metrics={"a": 1}, quality={"passed": True}), tmp_path
+        build_pipeline_report(metrics={"a": 1}, quality={"passed": True}), tmp_path
     )
     payload = json.loads(open(output["path"], encoding="utf-8").read())
 

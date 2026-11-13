@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-from semana3.sample_data import (
+from sla.sample_data import (
     build_processed_rows,
     load_events,
     main,

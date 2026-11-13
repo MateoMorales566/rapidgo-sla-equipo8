@@ -36,17 +36,19 @@ jobs:
           pip install -r requirements.txt
 
       - name: Validar sintaxis Python
-        run: python -m compileall -q producer spark sla semana3 airflow/dags tests
+        run: python -m compileall -q producer spark sla airflow/dags tests scripts
 
       - name: Validar contrato JSON y eventos de muestra
         run: |
           python -m sla.contract \
             samples/sla_event.json \
-            producer/sla_event_sample.json \
-            producer/sla_events_batch.json
+            samples/sla_events_batch.json
 
       - name: Ejecutar pruebas
         run: python -m pytest -v --junitxml=reports/junit.xml
+
+      - name: Quality Gate (Semana 4)
+        run: python scripts/quality_gate.py
 
       - name: Publicar reporte de pruebas
         if: always()
@@ -90,8 +92,8 @@ jobs:
 
       - name: Generar Data Lake de prueba
         run: |
-          python -m semana3.sample_data \
-            --input producer/sla_events_batch.json \
+          python -m sla.sample_data \
+            --input samples/sla_events_batch.json \
             --output reports/ci-datalake \
             --overwrite
 
@@ -144,13 +146,13 @@ jobs:
       - name: Recuperación tras eliminar la bandera
         run: |
           airflow dags test rapidgo_sla_semana3 2026-11-07
-          test -f reports/ci-reports/sla_semana3_latest.json
+          test -f reports/ci-reports/sla_latest.json
           python - <<'PY'
           import json
           from pathlib import Path
 
           report = json.loads(
-              Path("reports/ci-reports/sla_semana3_latest.json").read_text(encoding="utf-8")
+              Path("reports/ci-reports/sla_latest.json").read_text(encoding="utf-8")
           )
           assert report["quality"]["passed"] is True
           assert report["metrics"]["pedidos_unicos"] > 0
@@ -175,10 +177,8 @@ jobs:
       - name: Descargar repositorio
         uses: actions/checkout@v7
 
-      - name: Validar docker-compose base y Semana 3
-        run: |
-          docker compose config --quiet
-          docker compose -f docker-compose.yml -f docker-compose.semana3.yml config --quiet
+      - name: Validar docker-compose completo
+        run: docker compose config --quiet
 
       - name: Validar JSON del contrato
         run: python -c "import json; json.load(open('docs/contrato_evento.json', encoding='utf-8'))"
@@ -187,7 +187,6 @@ jobs:
         run: |
           test -f README.md
           test -f docker-compose.yml
-          test -f docker-compose.semana3.yml
           test -f requirements.txt
           test -f requirements-airflow.txt
           test -f airflow/dags/rapidgo_sla_orchestration.py
@@ -201,29 +200,22 @@ jobs:
           test -d airflow/flags
           test -d producer
           test -d spark
-          test -d semana3
+          test -d sla
           test -d tests
+          test -d samples
           test -d datalake/raw
           test -d datalake/processed
           test -d datalake/curated
-          
-  quality-gate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Configurar Python
-        uses: actions/setup-python@v7
+
+      - name: Empaquetar artefacto de release
+        run: |
+          mkdir -p reports
+          zip -r reports/rapidgo-sla-equipo8.zip . \
+            -x ".git/*" "datalake/*" "reports/*" "*.pdf" "**/__pycache__/*" \
+               ".pytest_cache/*" ".venv/*"
+
+      - name: Publicar artefacto de release
+        uses: actions/upload-artifact@v7
         with:
-          python-version: '3.13'
-          cache: 'pip'
-      - name: Instalar dependencias
-        run: pip install -r requirements.txt
-      - name: Validar sintaxis Python
-        run: python -m compileall producer spark tests airflow scripts
-      - name: Ejecutar pruebas
-        run: pytest -v
-      - name: Validar Docker Compose
-        run: docker compose config --quiet
-      - name: Quality Gate
-        run: python scripts/quality_gate.py
+          name: artefacto-release
+          path: reports/rapidgo-sla-equipo8.zip

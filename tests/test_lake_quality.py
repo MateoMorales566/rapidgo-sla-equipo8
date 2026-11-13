@@ -5,13 +5,13 @@ from __future__ import annotations
 import pyarrow.parquet as pq
 import pytest
 
-from semana3.quality import (
+from sla.quality import (
     QualityGateError,
     evaluate_quality,
     inspect_parquet,
     resolve_parquet_paths,
 )
-from semana3.sample_data import build_processed_rows, write_processed
+from sla.sample_data import build_processed_rows, write_processed
 
 
 def good_profile() -> dict:

@@ -34,9 +34,13 @@ jobs:
 
       - name: Quality Gate previo al release
         run: |
-          python -m compileall producer spark tests airflow scripts
+          python -m compileall -q producer spark sla airflow/dags tests scripts
           pytest -q
           python scripts/quality_gate.py
+          mkdir -p reports
+          zip -r reports/rapidgo-sla-equipo8.zip . \
+            -x ".git/*" "datalake/*" "reports/*" "*.pdf" "**/__pycache__/*" \
+               ".pytest_cache/*" ".venv/*"
 
       - name: Crear release con notas automáticas
         env:
@@ -50,3 +54,4 @@ jobs:
               --title "RapidGo SLA $TAG" \
               --generate-notes
           fi
+          gh release upload "$TAG" reports/rapidgo-sla-equipo8.zip --clobber

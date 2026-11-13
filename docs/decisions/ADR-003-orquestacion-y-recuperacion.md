@@ -38,7 +38,7 @@ perder trazabilidad.
 
 ## Evidencia utilizada
 
-Ejecución real en Docker con el lote `producer/sla_events_batch.json`:
+Ejecución real en Docker con el lote `samples/sla_events_batch.json`:
 
 ```text
 Eventos: 120
@@ -61,7 +61,7 @@ Alertas DELIVERY_STOPPED: 3
   regenerado.
 
 El detalle de comandos y estados está en
-[`docs/evidencias/semana3.md`](../evidencias/semana3.md) y en
+[`docs/evidencias.md`](../evidencias.md) y en
 [`docs/checkpoints/semana3.md`](../checkpoints/semana3.md).
 
 ## Consecuencias / trade-offs

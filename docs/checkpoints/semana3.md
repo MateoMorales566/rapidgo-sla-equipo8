@@ -10,7 +10,7 @@ validar_fuente -> perfilar_datos -> validar_calidad
 -> calcular_indicadores -> generar_reporte -> publicar_resultado
 ```
 
-Airflow corre en `docker-compose.semana3.yml` (Airflow 2.9.3 + pyarrow). El DAG es
+Airflow corre en el servicio `airflow` de `docker-compose.yml` (Airflow 2.9.3 + pyarrow). El DAG es
 manual (`schedule=None`) y no toca los checkpoints de Spark.
 
 ## 2. Valor real observado
@@ -30,7 +30,7 @@ Ejecución con el lote reproducible de 120 eventos y 30 pedidos:
 | Filas inválidas / duplicadas | 0 / 0 |
 
 Run exitoso: `manual__2026-11-01T00:00:00-05:00` (6 tareas en `success`).
-Reporte: `reports/sla_semana3_latest.json` (1250 bytes).
+Reporte: `reports/sla_latest.json` (1250 bytes).
 
 ## 3. Decisión técnica
 
@@ -69,5 +69,5 @@ retirar la bandera; no se borraron Parquet ni checkpoints.
 - Issues Semana 3: [#7 DAG](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/7), [#8 calidad](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/8), [#9 fallo y recuperación](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/9).
 - Pull Request de la rama `feature/semana3-orquestacion`: [#25](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/25), mergeado a `main` el 06/11/2026.
 - CI `CI RapidGo`: job `dag-airflow` ejecuta importación, run exitoso, fallo controlado y recuperación. Run en verde: [42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397).
-- Evidencia detallada: [`docs/evidencias/semana3.md`](../evidencias/semana3.md).
+- Evidencia detallada: [`docs/evidencias.md`](../evidencias.md).
 - Release `v0.3.0-orchestration`: publicado sobre el tag `9b396de`: [releases/tag/v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration).

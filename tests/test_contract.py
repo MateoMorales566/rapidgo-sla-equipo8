@@ -11,7 +11,7 @@ from sla.contract import is_valid, load_events, load_schema, validate_event, val
 
 ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = ROOT / "samples" / "sla_event.json"
-BATCH = ROOT / "producer" / "sla_events_batch.json"
+BATCH = ROOT / "samples" / "sla_events_batch.json"
 
 
 @pytest.fixture()

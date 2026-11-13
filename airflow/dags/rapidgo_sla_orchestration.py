@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from semana3.orchestration import (
+from sla.orchestration import (
     compute_metrics,
     profile_data,
     publish_summary,
