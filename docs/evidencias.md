@@ -431,3 +431,12 @@ con checkpoints en `datalake/_checkpoints/`.
 - Pendiente fuera del repositorio: video final y el `workflow_dispatch` manual de los otros
   dos integrantes.
 
+### 21. Pendientes justificados
+
+| Pendiente | Estado | Motivo / siguiente paso |
+|---|---|---|
+| Video final (máx. 10 min) | Pendiente | Requiere grabación con los tres integrantes; se enlazará en el README y en `v1.0.0`. |
+| `workflow_dispatch` de Andrés y Julián | Pendiente | Debe ejecutarlo cada integrante desde su propia cuenta; solo hay runs de `SantiagoG1309`. |
+| Tablero Kanban | Sin verificar | El token usado no tiene el scope `read:project`; el tablero debe revisarse en la UI del Project. |
+| Revisiones humanas de PR | Parcial | Los PR tienen revisión de Copilot; falta la aprobación explícita de otro integrante en la UI. |
+

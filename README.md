@@ -345,6 +345,14 @@ adicionales al topic:
 - El video final no se versiona en el repositorio; debe publicarse en el release `v1.0.0`
   y enlazarse aquí cuando el equipo lo grabe.
 
+### Trabajo futuro
+
+- Calibrar los umbrales de SLA por zona con datos reales y separar metas por tipo de pedido.
+- Reemplazar las credenciales y la `FERNET_KEY` de demo por secretos gestionados.
+- Añadir métricas de calidad del dato al tablero y alertas por desviación de volumen.
+- Evaluar Spark en clúster (`spark-master` + `spark-worker`) para volúmenes mayores.
+- Versionar el video final y el enlace en el release `v1.0.0` y en este README.
+
 ## Video final
 
 Pendiente de grabación por el equipo (máximo 10 minutos). Cuando esté disponible se
@@ -359,7 +367,7 @@ de Docker/Kafka/Spark/Data Lake/Airflow, recorrido por GitHub y resultados.
 |---|---|---|---|
 | Andrés Morales | Producer y contrato | #1, #4, #7, #13 | #15, #17, #23 |
 | Julián Pérez | Kafka, Spark y Data Lake | #2, #5, #9 | #14, #18, #22, #24, #26, #27, #28 |
-| Kevin García | KPIs, alertas, pruebas, CI y Semanas 3-4 | #3, #6, #8, #10, #11, #12 | #16, #19, #20, #21, #25, #29 |
+| Kevin García | KPIs, alertas, pruebas, CI y Semanas 3-4 | #3, #6, #8, #10, #11, #12 | #16, #19, #20, #21, #25, #29, #30, #31, #32 |
 
 La autoría de los commits dentro de cada PR puede incluir aportes de otros integrantes;
 el detalle queda en el historial de cada rama. Antes del release final cada integrante
