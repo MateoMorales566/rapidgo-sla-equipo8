@@ -34,9 +34,9 @@ alertas y un reporte batch listos para consulta.
 | `v0.3.0-orchestration` | 3 | Publicado e integrado a `main` por el PR #25 |
 | `v1.0.0` | 4 | Publicado (tag sobre `234cad3`); el ZIP adjunto corresponde a ese commit |
 
-`main` avanzó dos commits después del tag con el PR #34, que unificó las dependencias en un
-solo `requirements.txt`. El release se mantiene sobre el tag, así que el ZIP publicado no
-incluye ese cambio; las notas de cada entrega están en [`docs/releases.md`](docs/releases.md).
+`main` sumó después del tag los PRs #34 (requirements unificados) y #35 (cierre
+documental). El release se mantiene sobre el tag, así que el ZIP publicado no incluye esos
+cambios; las notas de cada entrega están en [`docs/releases.md`](docs/releases.md).
 
 ## Arquitectura
 
@@ -110,7 +110,9 @@ README.md                       Documentación principal
 
 ## Instalación
 
-Prerequisitos: Docker Desktop, Git y (opcional) Python 3.11/3.12.
+Prerequisitos: Docker Desktop, Git y Python. La instalación completa necesita **Python 3.11
+o 3.12**, porque Airflow 2.9.3 no soporta 3.13. El pipeline base y las pruebas funcionan
+también en 3.13.
 
 ```bash
 python -m venv .venv
@@ -119,12 +121,13 @@ python -m venv .venv
 # Linux/macOS
 source .venv/bin/activate
 
+# Instalación completa (Python 3.11 o 3.12)
 pip install -r requirements.txt
 ```
 
-`requirements.txt` agrupa cuatro bloques comentados: base, pruebas, Airflow y Spark. La
-instalación completa sirve para tener todo el proyecto en una sola máquina. Para trabajar
-solo con el pipeline base y las pruebas, sin Airflow ni PySpark:
+`requirements.txt` agrupa cuatro bloques comentados: base, pruebas, Airflow y Spark. Para
+trabajar solo con el pipeline base y las pruebas, sin Airflow ni PySpark (sirve también en
+Python 3.13):
 
 ```bash
 # Linux/macOS
@@ -292,6 +295,13 @@ El workflow [`ci.yml`](.github/workflows/ci.yml) se ejecuta en `push`,
 3. `validar-configuracion`: valida el compose, el contrato, la estructura del repositorio
    y empaqueta el artefacto de release.
 
+### Ejecución manual del workflow
+
+Cada integrante lanza el workflow desde **Actions -> CI RapidGo -> Run workflow**, rama
+`main`. El nombre del run queda como `CI ejecutado por <usuario>`, así que sirve como
+evidencia de participación individual. Las ejecuciones registradas están enlazadas en
+[`docs/checkpoints/semana4.md`](docs/checkpoints/semana4.md).
+
 El **Quality Gate** (`scripts/quality_gate.py`) exige README completo, compose, pruebas,
 paquete `sla/`, DAG con al menos 5 tareas, tres ADR y los checkpoints semanales. Si falla,
 el CI y el workflow de release se detienen y no se publica `v1.0.0`.
@@ -347,7 +357,9 @@ adicionales al topic:
 - Tablero Kanban:
   [RapidGo - Equipo 8 - SLA de entregas](https://github.com/users/MateoMorales566/projects/1)
 - Actions: pestaña **Actions -> CI RapidGo** del repositorio.
-  - CI final sobre `main` (`6d1f284`): [run 43457040585](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43457040585)
+  - Cierre documental (PR #35): [run 43458672689](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43458672689)
+  - Ejecución manual de `NyawToo`: [run 43460938070](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43460938070)
+  - CI sobre `main` al merge del PR #34: [run 43457040585](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43457040585)
   - Requirements unificados (PR #34): [run 43456837016](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43456837016)
   - Integración final (PR #30): [run 43349705279](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349705279)
   - Ejecución manual final: [run 43349871595](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349871595)
@@ -363,9 +375,9 @@ adicionales al topic:
 | Repositorio unificado, ejecutable y documentado | ✅ |
 | Pipeline Kafka -> Spark -> Data Lake -> Airflow con Docker | ✅ |
 | 70 pruebas, Quality Gate y `docker compose config` | ✅ |
-| CI en verde sobre `main` (`6d1f284`) | ✅ |
+| CI en verde sobre `main` | ✅ |
 | Release `v1.0.0` con el ZIP adjunto | ✅ |
-| Tablero Kanban enlazado y 13 issues cerrados | ✅ |
+| Tablero Kanban enlazado y 13 tarjetas en DONE | ✅ |
 | Video final de hasta 10 minutos | ❌ Pendiente |
 
 ## Limitaciones conocidas
@@ -415,9 +427,11 @@ Estado: pendiente de grabación. El detalle del cierre está en
 | Integrante | Responsabilidad | Issues asignados | PRs |
 |---|---|---|---|
 | Andrés Morales | Producer y contrato | #1, #4, #7, #13 | #15, #17, #23 |
-| Julián Pérez | Kafka, Spark y Data Lake | #2, #5, #9 | #14, #18, #22, #24, #26, #27, #28 |
+| Julián Pérez | Kafka, Spark y Data Lake | #2, #5, #9 | #14, #18, #22, #24, #26, #27, #28, #35 |
 | Kevin García | KPIs, alertas, pruebas, CI y Semanas 3-4 | #3, #6, #8, #10, #11, #12 | #16, #19, #20, #21, #25, #29, #30, #31, #32, #33, #34 |
 
-La autoría de los commits dentro de cada PR puede incluir aportes de otros integrantes; el
-detalle queda en el historial de cada rama. El estado del cierre, con las verificaciones y
-el pendiente del video, está en [`docs/checkpoints/semana4.md`](docs/checkpoints/semana4.md).
+El PR #29 se abrió desde la rama `andres` y su commit es de Andrés Morales, aunque la cuenta
+que creó la PR fue otra; el historial de commits lo registra. La autoría de los commits
+dentro de cada PR puede incluir aportes de otros integrantes. El estado del cierre, con las
+verificaciones y el pendiente del video, está en
+[`docs/checkpoints/semana4.md`](docs/checkpoints/semana4.md).

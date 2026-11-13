@@ -386,6 +386,13 @@ y en `pull_request` ([run 43456837016](https://github.com/MateoMorales566/rapidg
 El merge `6d1f284` volvió a ejecutar el CI sobre `main` en
 [run 43457040585](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43457040585).
 
+El cierre documental entró con el PR
+[#35](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/35), mergeado por
+`SantiagoG1309`, con CI en verde en
+[run 43458672689](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43458672689).
+La ejecución manual de `NyawToo` quedó registrada en
+[run 43460938070](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43460938070).
+
 ### 19. Pipeline completo con Docker sobre `main`
 
 Ejecución de cierre sobre el merge `fdb10fd` (2026-11-12), con el stack completo levantado
@@ -431,7 +438,8 @@ con checkpoints en `datalake/_checkpoints/`.
 
 - Tag y release `v1.0.0` sobre el merge `234cad3` (PR #33), publicado el 2026-11-13 con el
   ZIP del repositorio adjunto.
-- `main` avanzó dos commits después del tag con el PR #34 (requirements unificados).
+- `main` avanzó después del tag con los PRs #34 (requirements unificados) y #35 (cierre
+  documental).
 - Issue [#12](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/12) cerrado con
   el release.
 - Issue [#11](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/11) cerrado por
@@ -446,11 +454,15 @@ Los tres archivos de requirements se reemplazaron por uno solo con cuatro bloque
 comentados:
 
 ```text
-base     confluent-kafka, jsonschema[format], python-dotenv, pyarrow
+base     confluent-kafka, jsonschema[format], python-dotenv, pyarrow>=16.1.0
 pruebas  pytest, pytest-mock
 airflow  apache-airflow==2.9.3
 spark    pyspark==3.5.3
 ```
+
+`pyarrow` quedó como mínimo `16.1.0` para que la instalación base funcione también en
+Python 3.13; el `airflow/Dockerfile` mantiene la versión 16.1.0 que acompaña a Airflow
+2.9.3.
 
 El CI, el workflow de release y el `producer/Dockerfile` filtran con
 `grep -vE '^(apache-airflow|pyspark)'` para no instalar las pilas que no usan. Se
@@ -462,8 +474,34 @@ README, el Quality Gate y esta evidencia. Verificación: 70 pruebas, Quality Gat
 
 | Pendiente | Estado | Motivo / siguiente paso |
 |---|---|---|
-| Video final (máx. 10 min) | Pendiente | Único entregable abierto. Se enlaza en el release `v1.0.0` y en el README; los pasos están en `docs/checkpoints/semana4.md`. |
-| `workflow_dispatch` de Andrés y Julián | Pendiente | Debe ejecutarlo cada integrante desde su propia cuenta; solo hay runs de `SantiagoG1309`. |
-| Tablero Kanban | Verificado | Project público [RapidGo - Equipo 8](https://github.com/users/MateoMorales566/projects/1), enlazado en el README; 13 issues cerrados. Las tarjetas no se pudieron revisar por API porque el token no tiene `read:project`. |
-| Revisiones humanas de PR | Parcial | Los 21 PR tienen revisión de Copilot; no hay aprobación humana registrada en la UI. |
+| Video final (máx. 10 min) | Pendiente | Único entregable de contenido. Se enlaza en el release `v1.0.0` y en el README; los pasos están en `docs/checkpoints/semana4.md`. |
+| `workflow_dispatch` de Andrés | Pendiente | Julián ya ejecutó el suyo ([run 43460938070](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43460938070)); Andrés debe lanzarlo desde su cuenta. |
+| Tablero Kanban | Verificado | Project público [RapidGo - Equipo 8](https://github.com/users/MateoMorales566/projects/1), enlazado en el README; 13 de 13 tarjetas en la columna DONE. |
+| Revisiones humanas de PR | Parcial | PRs #29, #30 y #34 aprobados por `NyawToo`; el PR #35 quedó sin aprobación humana registrada. |
+
+### 23. Verificación en clon limpio
+
+Para comprobar el requisito de "repositorio ejecutable siguiendo el README" se clonó el
+repositorio en una carpeta temporal, sin estado previo, sobre el merge `4a53d7b`:
+
+```text
+Python 3.13.14 (venv nuevo)
+Instalación: grupo base de requirements.txt (pyarrow 26.0.1)
+$ python -m pytest -q
+70 passed
+$ python -m producer.producer --dry-run --count 120 --interval 300 --seed 8 \
+    --start-time 2026-10-29T12:00:00Z --output reports/sla_events_batch.json
+eventos=120 errores_publicacion=0
+$ python -m sla.contract samples/sla_event.json samples/sla_events_batch.json
+OK samples/sla_event.json: 1 evento(s) válido(s)
+OK samples/sla_events_batch.json: 120 evento(s) válido(s)
+$ python -m sla.reporting reports/sla_events_batch.json
+25 entregas, 36.56 min, 12.00 % fuera de SLA, 3 SLA_EXCEEDED, 3 DELIVERY_STOPPED
+$ docker compose config --quiet
+exit 0
+```
+
+La instalación completa necesita Python 3.11 o 3.12 porque Airflow 2.9.3 no soporta 3.13.
+El grupo base se instaló en 3.13 sin problemas y `pyarrow>=16.1.0` deja elegir la versión
+con rueda disponible para esa versión de Python.
 

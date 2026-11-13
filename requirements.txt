@@ -15,7 +15,8 @@
 confluent-kafka>=2.3.0
 jsonschema[format]>=4.20.0
 python-dotenv>=1.0.0
-pyarrow==16.1.0
+# El Dockerfile de Airflow mantiene pyarrow 16.1.0.
+pyarrow>=16.1.0
 
 # --- Pruebas / GitHub Actions ---
 pytest>=7.4.0
