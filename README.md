@@ -326,6 +326,8 @@ adicionales al topic:
   [releases/tag/v1.0.0](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v1.0.0)
 - Historial completo de releases:
   [releases](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases)
+- Tablero Kanban:
+  [RapidGo - Equipo 8 - SLA de entregas](https://github.com/users/MateoMorales566/projects/1)
 - Actions: pestaña **Actions -> CI RapidGo** del repositorio.
   - Integración final (PR #30): [run 43349705279](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349705279)
   - Ejecución manual final: [run 43349871595](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349871595)
