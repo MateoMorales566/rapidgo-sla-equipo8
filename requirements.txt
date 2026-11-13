@@ -1,12 +1,28 @@
-# Dependencias de runtime y CI del proyecto RapidGo SLA
-# (Kafka, validación de contrato, lectura Parquet y pruebas;
-#  PySpark va en requirements-spark.txt y Airflow en requirements-airflow.txt)
+# Catalogo unico de dependencias del proyecto RapidGo SLA.
+#
+# Un solo archivo, cuatro grupos. Cada contexto instala el grupo que necesita y
+# filtra las pilas pesadas que no usa:
+#
+#   base     producer, contrato, reporte y pruebas
+#   pruebas  CI y desarrollo local
+#   airflow  orquestacion; en CI se instala con el archivo de constraints de Airflow
+#   spark    ejecucion local de Spark; requiere JDK 17 (la imagen bitnami ya trae PySpark)
+#
+# Filtro que usan el CI, el workflow de release y el Dockerfile del producer:
+#   grep -vE '^(apache-airflow|pyspark)' requirements.txt
 
+# --- Base ---
 confluent-kafka>=2.3.0
 jsonschema[format]>=4.20.0
 python-dotenv>=1.0.0
 pyarrow==16.1.0
 
-# Testing / GitHub Actions
+# --- Pruebas / GitHub Actions ---
 pytest>=7.4.0
 pytest-mock>=3.10.0
+
+# --- Orquestacion (Python 3.11 con constraints de Airflow 2.9.3) ---
+apache-airflow==2.9.3
+
+# --- Spark local (JDK 17) ---
+pyspark==3.5.3

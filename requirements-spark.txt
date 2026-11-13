@@ -1,3 +1,0 @@
-# Dependencias para ejecutar Spark localmente (no se instalan en CI).
-# La imagen bitnami/spark:3.5.3 ya trae PySpark 3.5.3.
-pyspark==3.5.3

@@ -30,7 +30,9 @@ jobs:
           cache: 'pip'
 
       - name: Instalar dependencias
-        run: pip install -r requirements.txt
+        run: |
+          grep -vE '^(apache-airflow|pyspark)' requirements.txt > /tmp/requirements-release.txt
+          pip install -r /tmp/requirements-release.txt
 
       - name: Quality Gate previo al release
         run: |
