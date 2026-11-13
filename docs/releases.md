@@ -199,6 +199,8 @@ definitivo con instalación, arquitectura, ejecución, resultados y responsables
 - `release.yml` con quality gate previo, empaquetado `.zip` y publicación del release.
 - `docs/evidencias.md` y `docs/releases.md` consolidados.
 - 70 pruebas automatizadas y CI en verde antes del tag.
+- `requirements.txt` unificado en cuatro grupos (base, pruebas, Airflow y Spark) en el
+  PR [#34](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/34), después del tag.
 
 ### Cómo verificar
 
@@ -233,6 +235,11 @@ Calidad: 0 filas inválidas, 0 duplicados
 
 ### Estado
 
-Publicado. Tag y GitHub Release `v1.0.0` creados sobre `main` con el `.zip` del repositorio
-adjunto por `release.yml`. El video final no forma parte de este repositorio: queda como
-pendiente del equipo y debe enlazarse desde este release y desde el README.
+Publicado. Tag y GitHub Release `v1.0.0` creados sobre el merge `234cad3` (PR #33,
+2026-11-13) con el ZIP del repositorio adjunto por `release.yml`. `main` avanzó dos commits
+después del tag con el PR #34, que unificó las dependencias en un solo `requirements.txt`;
+el artefacto del release sigue correspondiendo al contenido del tag.
+
+El video final no forma parte del repositorio: es el único pendiente del equipo y debe
+enlazarse desde este release y desde el README. Los pasos están en
+[`docs/checkpoints/semana4.md`](checkpoints/semana4.md).

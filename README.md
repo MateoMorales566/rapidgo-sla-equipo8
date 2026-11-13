@@ -32,9 +32,11 @@ alertas y un reporte batch listos para consulta.
 | `v0.1.0-foundation` | 1 | Publicado |
 | `v0.2.0-streaming` | 2 | Publicado |
 | `v0.3.0-orchestration` | 3 | Publicado e integrado a `main` por el PR #25 |
-| `v1.0.0` | 4 | Publicado sobre `main` (merge `fdb10fd`) |
+| `v1.0.0` | 4 | Publicado (tag sobre `234cad3`); el ZIP adjunto corresponde a ese commit |
 
-Notas de cada entrega: [`docs/releases.md`](docs/releases.md).
+`main` avanzó dos commits después del tag con el PR #34, que unificó las dependencias en un
+solo `requirements.txt`. El release se mantiene sobre el tag, así que el ZIP publicado no
+incluye ese cambio; las notas de cada entrega están en [`docs/releases.md`](docs/releases.md).
 
 ## Arquitectura
 
@@ -90,7 +92,7 @@ docs/contrato_evento.json       Contrato JSON del evento
 docs/kpis_alertas.md            KPIs, umbrales y reglas de alerta
 docs/evidencias.md              Evidencias de ejecución de las semanas 2, 3 y 4
 docs/releases.md                Notas consolidadas de los releases
-docs/checkpoints/               Checkpoints de las semanas 1 a 3
+docs/checkpoints/               Checkpoints de las semanas 1 a 4
 docs/decisions/                 ADR-001, ADR-002 y ADR-003
 producer/                       Generador de eventos y cliente Kafka
 samples/                        Evento de muestra y lote reproducible de 120 eventos
@@ -118,6 +120,24 @@ python -m venv .venv
 source .venv/bin/activate
 
 pip install -r requirements.txt
+```
+
+`requirements.txt` agrupa cuatro bloques comentados: base, pruebas, Airflow y Spark. La
+instalación completa sirve para tener todo el proyecto en una sola máquina. Para trabajar
+solo con el pipeline base y las pruebas, sin Airflow ni PySpark:
+
+```bash
+# Linux/macOS
+grep -vE '^(apache-airflow|pyspark)' requirements.txt > /tmp/requirements-base.txt
+pip install -r /tmp/requirements-base.txt
+```
+
+```powershell
+# Windows PowerShell
+Get-Content requirements.txt |
+  Where-Object { $_ -notmatch '^(apache-airflow|pyspark)' } |
+  Set-Content requirements-base.txt -Encoding ascii
+pip install -r requirements-base.txt
 ```
 
 Para Spark local se necesita **JDK 17**: PySpark ya viene en `requirements.txt`. Airflow se
@@ -311,8 +331,8 @@ adicionales al topic:
 ## Evidencias
 
 - Checkpoints: [`semana1`](docs/checkpoints/semana1.md),
-  [`semana2`](docs/checkpoints/semana2.md) y
-  [`semana3`](docs/checkpoints/semana3.md).
+  [`semana2`](docs/checkpoints/semana2.md), [`semana3`](docs/checkpoints/semana3.md) y
+  [`semana4`](docs/checkpoints/semana4.md).
 - Evidencias de ejecución: [`docs/evidencias.md`](docs/evidencias.md).
 - ADR: [`ADR-001`](docs/decisions/ADR-001-kafka-sla.md),
   [`ADR-002`](docs/decisions/ADR-002-ventana-watermark-checkpoints.md) y
@@ -327,12 +347,26 @@ adicionales al topic:
 - Tablero Kanban:
   [RapidGo - Equipo 8 - SLA de entregas](https://github.com/users/MateoMorales566/projects/1)
 - Actions: pestaña **Actions -> CI RapidGo** del repositorio.
+  - CI final sobre `main` (`6d1f284`): [run 43457040585](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43457040585)
+  - Requirements unificados (PR #34): [run 43456837016](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43456837016)
   - Integración final (PR #30): [run 43349705279](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349705279)
   - Ejecución manual final: [run 43349871595](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349871595)
   - Semana 3 en verde (PR #25): [run 42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397)
   - CI en verde Semana 2: [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
   - Fallo controlado: [run 40985829295](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985829295)
   - Ejecución manual: [run 40985938802](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985938802)
+
+## Checklist de entrega
+
+| Requisito | Estado |
+|---|---|
+| Repositorio unificado, ejecutable y documentado | ✅ |
+| Pipeline Kafka -> Spark -> Data Lake -> Airflow con Docker | ✅ |
+| 70 pruebas, Quality Gate y `docker compose config` | ✅ |
+| CI en verde sobre `main` (`6d1f284`) | ✅ |
+| Release `v1.0.0` con el ZIP adjunto | ✅ |
+| Tablero Kanban enlazado y 13 issues cerrados | ✅ |
+| Video final de hasta 10 minutos | ❌ Pendiente |
 
 ## Limitaciones conocidas
 
@@ -342,8 +376,8 @@ adicionales al topic:
   descargar el conector Kafka-Spark desde Maven.
 - La escritura Parquet local en Windows requiere `winutils.exe`; en Docker/Linux funciona
   sin pasos adicionales.
-- El video final no se versiona en el repositorio; debe publicarse en el release `v1.0.0`
-  y enlazarse aquí cuando el equipo lo grabe.
+- El video final no se versiona en el repositorio; se publica fuera y se enlaza desde el
+  release `v1.0.0` y desde este README.
 
 ### Trabajo futuro
 
@@ -351,15 +385,30 @@ adicionales al topic:
 - Reemplazar las credenciales y la `FERNET_KEY` de demo por secretos gestionados.
 - Añadir métricas de calidad del dato al tablero y alertas por desviación de volumen.
 - Evaluar Spark en clúster (`spark-master` + `spark-worker`) para volúmenes mayores.
-- Versionar el video final y el enlace en el release `v1.0.0` y en este README.
+- Enlazar el video final en el release `v1.0.0` y en este README.
 
 ## Video final
 
-Pendiente de grabación por el equipo (máximo 10 minutos). Cuando esté disponible se
-enlazará aquí y en el release
-[`v1.0.0`](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v1.0.0).
-El guion sugerido de la guía es: problema y variante, arquitectura, demostración funcional
-de Docker/Kafka/Spark/Data Lake/Airflow, recorrido por GitHub y resultados.
+Es el único entregable abierto. Dura como máximo 10 minutos, no se versiona en el
+repositorio y se enlaza desde el release `v1.0.0` y desde esta sección.
+
+Contenido previsto, en orden:
+
+1. Problema de negocio y variante 1 (SLA de entregas).
+2. Arquitectura y decisiones principales (ADR-001 a ADR-003).
+3. Demostración funcional: Docker, Kafka, Spark Structured Streaming, capas del Data Lake y
+   DAG de Airflow, incluido el fallo controlado y la recuperación.
+4. Recorrido por GitHub: README, Actions, releases, PRs, issues y tablero Kanban.
+5. Resultados del lote de 120 eventos y limitaciones conocidas.
+
+Pasos para publicarlo:
+
+1. Grabar el video y subirlo a YouTube (público o no listado).
+2. Editar el release `v1.0.0` y agregar el enlace en las notas.
+3. Reemplazar el párrafo de estado de esta sección por el enlace y la fecha de grabación.
+
+Estado: pendiente de grabación. El detalle del cierre está en
+[`docs/checkpoints/semana4.md`](docs/checkpoints/semana4.md).
 
 ## Responsables y contribuciones
 
@@ -367,9 +416,8 @@ de Docker/Kafka/Spark/Data Lake/Airflow, recorrido por GitHub y resultados.
 |---|---|---|---|
 | Andrés Morales | Producer y contrato | #1, #4, #7, #13 | #15, #17, #23 |
 | Julián Pérez | Kafka, Spark y Data Lake | #2, #5, #9 | #14, #18, #22, #24, #26, #27, #28 |
-| Kevin García | KPIs, alertas, pruebas, CI y Semanas 3-4 | #3, #6, #8, #10, #11, #12 | #16, #19, #20, #21, #25, #29, #30, #31, #32 |
+| Kevin García | KPIs, alertas, pruebas, CI y Semanas 3-4 | #3, #6, #8, #10, #11, #12 | #16, #19, #20, #21, #25, #29, #30, #31, #32, #33, #34 |
 
-La autoría de los commits dentro de cada PR puede incluir aportes de otros integrantes;
-el detalle queda en el historial de cada rama. Antes del release final cada integrante
-debe ejecutar al menos una vez el workflow con `workflow_dispatch` y dejar el run visible
-en Actions.
+La autoría de los commits dentro de cada PR puede incluir aportes de otros integrantes; el
+detalle queda en el historial de cada rama. El estado del cierre, con las verificaciones y
+el pendiente del video, está en [`docs/checkpoints/semana4.md`](docs/checkpoints/semana4.md).
