@@ -206,3 +206,24 @@ jobs:
           test -d datalake/raw
           test -d datalake/processed
           test -d datalake/curated
+          
+  quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+      - name: Validar sintaxis Python
+        run: python -m compileall producer spark tests airflow scripts
+      - name: Ejecutar pruebas
+        run: pytest -v
+      - name: Validar Docker Compose
+        run: docker compose config --quiet
+      - name: Quality Gate
+        run: python scripts/quality_gate.py

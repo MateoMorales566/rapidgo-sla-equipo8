@@ -65,7 +65,7 @@ services:
     restart: unless-stopped
 
   spark-master:
-    image: bitnami/spark:3.5.3
+    image: bitnamilegacy/spark:3.5.3
     hostname: spark-master
     environment:
       SPARK_MODE: master
@@ -74,7 +74,7 @@ services:
       - "8080:8080"
 
   spark-worker:
-    image: bitnami/spark:3.5.3
+    image: bitnamilegacy/spark:3.5.3
     hostname: spark-worker
     depends_on:
       - spark-master
@@ -86,7 +86,7 @@ services:
       - "8081:8081"
 
   spark-job:
-    image: bitnami/spark:3.5.3
+    image: bitnamilegacy/spark:3.5.3
     user: root
     depends_on:
       kafka-init:
