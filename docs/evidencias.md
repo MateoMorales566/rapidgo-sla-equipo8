@@ -1,4 +1,4 @@
-# Evidencias de ejecución - Semanas 2 y 3
+# Evidencias de ejecución - Semanas 2, 3 y 4
 
 Documento consolidado con las salidas reales del pipeline. Los conteos de pruebas
 corresponden al momento de cada entrega; la suite actual se ejecuta en el CI y en
@@ -365,8 +365,9 @@ exit 0
 ```
 
 El Quality Gate exige README completo, los servicios `kafka`, `spark-job` y `airflow` en
-el compose, el paquete `sla/`, los tres ADR, los tres checkpoints y un DAG con al menos 5
-tareas. También se empaqueta `reports/rapidgo-sla-equipo8.zip` como artefacto de release.
+el compose, el paquete `sla/`, los tres ADR, los checkpoints de las semanas 1 a 3 y un DAG
+con al menos 5 tareas. También se empaqueta `reports/rapidgo-sla-equipo8.zip` como
+artefacto de release.
 
 ### 18. CI y PR
 
@@ -377,6 +378,13 @@ tareas. También se empaqueta `reports/rapidgo-sla-equipo8.zip` como artefacto d
 
 Los tres jobs terminaron en `success`: `calidad-codigo`, `dag-airflow` y
 `validar-configuracion`.
+
+Después del release se unificaron las dependencias en el PR
+[#34](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/34), con CI en verde en
+`push` ([run 43455874461](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43455874461))
+y en `pull_request` ([run 43456837016](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43456837016)).
+El merge `6d1f284` volvió a ejecutar el CI sobre `main` en
+[run 43457040585](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43457040585).
 
 ### 19. Pipeline completo con Docker sobre `main`
 
@@ -421,22 +429,41 @@ con checkpoints en `datalake/_checkpoints/`.
 
 ### 20. Cierre del release
 
-- Tag y release `v1.0.0` sobre `main` (merge `fdb10fd`).
+- Tag y release `v1.0.0` sobre el merge `234cad3` (PR #33), publicado el 2026-11-13 con el
+  ZIP del repositorio adjunto.
+- `main` avanzó dos commits después del tag con el PR #34 (requirements unificados).
 - Issue [#12](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/12) cerrado con
   el release.
 - Issue [#11](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/11) cerrado por
   el PR #30.
 - Issue [#10](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/10) cerrado por
   el PR #29.
-- Pendiente fuera del repositorio: video final y el `workflow_dispatch` manual de los otros
-  dos integrantes.
+- Pendiente fuera del repositorio: el video final.
 
-### 21. Pendientes justificados
+### 21. Dependencias unificadas (PR #34)
+
+Los tres archivos de requirements se reemplazaron por uno solo con cuatro bloques
+comentados:
+
+```text
+base     confluent-kafka, jsonschema[format], python-dotenv, pyarrow
+pruebas  pytest, pytest-mock
+airflow  apache-airflow==2.9.3
+spark    pyspark==3.5.3
+```
+
+El CI, el workflow de release y el `producer/Dockerfile` filtran con
+`grep -vE '^(apache-airflow|pyspark)'` para no instalar las pilas que no usan. Se
+eliminaron `requirements-airflow.txt` y `requirements-spark.txt`, y se actualizaron el
+README, el Quality Gate y esta evidencia. Verificación: 70 pruebas, Quality Gate OK,
+`docker compose config` OK y CI en verde.
+
+### 22. Pendientes justificados
 
 | Pendiente | Estado | Motivo / siguiente paso |
 |---|---|---|
-| Video final (máx. 10 min) | Pendiente | Requiere grabación con los tres integrantes; se enlazará en el README y en `v1.0.0`. |
+| Video final (máx. 10 min) | Pendiente | Único entregable abierto. Se enlaza en el release `v1.0.0` y en el README; los pasos están en `docs/checkpoints/semana4.md`. |
 | `workflow_dispatch` de Andrés y Julián | Pendiente | Debe ejecutarlo cada integrante desde su propia cuenta; solo hay runs de `SantiagoG1309`. |
-| Tablero Kanban | Existe, revisar tarjetas | Project público [RapidGo - Equipo 8](https://github.com/users/MateoMorales566/projects/1); el token usado no tiene `read:project`, así que las tarjetas deben cerrarse/verificarse en la UI. |
-| Revisiones humanas de PR | Parcial | Los PR tienen revisión de Copilot; falta la aprobación explícita de otro integrante en la UI. |
+| Tablero Kanban | Verificado | Project público [RapidGo - Equipo 8](https://github.com/users/MateoMorales566/projects/1), enlazado en el README; 13 issues cerrados. Las tarjetas no se pudieron revisar por API porque el token no tiene `read:project`. |
+| Revisiones humanas de PR | Parcial | Los 21 PR tienen revisión de Copilot; no hay aprobación humana registrada en la UI. |
 
