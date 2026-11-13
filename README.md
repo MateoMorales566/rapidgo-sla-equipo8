@@ -308,7 +308,8 @@ repositorio y publica el GitHub Release a partir de un tag `v*.*.*`.
 - Release `v0.3.0-orchestration`:
   [releases/tag/v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
 - Actions: pestaña **Actions -> CI RapidGo** del repositorio.
-  - Integración final (PR #30): [run 43349505174](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349505174)
+  - Integración final (PR #30): [run 43349705279](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349705279)
+  - Ejecución manual final: [run 43349871595](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349871595)
   - Semana 3 en verde (PR #25): [run 42147681397](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/42147681397)
   - CI en verde Semana 2: [run 40985893801](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985893801)
   - Fallo controlado: [run 40985829295](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/40985829295)

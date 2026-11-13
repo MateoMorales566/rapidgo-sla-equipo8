@@ -371,8 +371,9 @@ tareas. También se empaqueta `reports/rapidgo-sla-equipo8.zip` como artefacto d
 ### 18. CI y PR
 
 - PR de integración: [#30](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/30)
-- CI en `push`: [run 43349476278](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349476278)
-- CI en `pull_request`: [run 43349505174](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349505174)
+- CI en `push`: [run 43349700354](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349700354)
+- CI en `pull_request`: [run 43349705279](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349705279)
+- Ejecución manual `workflow_dispatch`: [run 43349871595](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349871595)
 
 Los tres jobs terminaron en `success`: `calidad-codigo`, `dag-airflow` y
 `validar-configuracion`.
