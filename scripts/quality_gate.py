@@ -15,7 +15,6 @@ REQUIRED_PATHS = [
     "README.md",
     "docker-compose.yml",
     "requirements.txt",
-    "requirements-airflow.txt",
     ".github/workflows/ci.yml",
     ".github/workflows/release.yml",
     "producer",

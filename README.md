@@ -99,9 +99,7 @@ sla/                            Reglas, contrato, reporte, calidad y orquestaci�
 spark/                          Job streaming y demo batch
 tests/                          70 pruebas automatizadas
 docker-compose.yml              Kafka, Spark y Airflow
-requirements.txt                Dependencias base y de CI
-requirements-airflow.txt        Airflow 2.9.3 y pyarrow
-requirements-spark.txt          PySpark para ejecución local
+requirements.txt                Dependencias del proyecto (base, pruebas, Airflow y Spark)
 pytest.ini                      Configuración de pytest (pythonpath)
 README.md                       Documentación principal
 .gitignore                      Exclusiones de datos y entornos
@@ -122,7 +120,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Para Spark local se necesita **JDK 17** y `requirements-spark.txt`. Airflow solo se
+Para Spark local se necesita **JDK 17**: PySpark ya viene en `requirements.txt`. Airflow se
 ejecuta en Docker o en el job `dag-airflow` del CI.
 
 ## Ejecución con Docker

@@ -65,7 +65,7 @@ SLA_EXCEEDED     order-20261029-00024 zona=Centro 20.0 min
 
 ### 4. Spark batch sobre el mismo lote
 
-Comando (requiere JDK 17 y `requirements-spark.txt`):
+Comando (requiere JDK 17 y la dependencia de PySpark de `requirements.txt`):
 
 ```text
 python -m spark.batch_demo --input samples/sla_events_batch.json
