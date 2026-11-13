@@ -75,7 +75,7 @@ El video es el único entregable abierto. No se versiona en el repositorio.
 1. Grabar la demo (máximo 10 minutos): problema, arquitectura, Docker/Kafka/Spark/Data
    Lake/Airflow con el fallo controlado y la recuperación, recorrido por GitHub y
    resultados.
-2. Subirlo a YouTube (público o no listado).
+2. Subirlo a YouTube (no listado) o a Google Drive con permiso de lectura.
 3. Editar el release `v1.0.0` y agregar el enlace en las notas.
 4. Reemplazar el estado "pendiente" del README por el enlace y la fecha de grabación.
 

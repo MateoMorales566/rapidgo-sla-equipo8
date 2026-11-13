@@ -403,7 +403,7 @@ Contenido previsto, en orden:
 
 Pasos para publicarlo:
 
-1. Grabar el video y subirlo a YouTube (público o no listado).
+1. Grabar el video y subirlo a YouTube (no listado) o a Google Drive con permiso de lectura.
 2. Editar el release `v1.0.0` y agregar el enlace en las notas.
 3. Reemplazar el párrafo de estado de esta sección por el enlace y la fecha de grabación.
 
