@@ -437,6 +437,6 @@ con checkpoints en `datalake/_checkpoints/`.
 |---|---|---|
 | Video final (máx. 10 min) | Pendiente | Requiere grabación con los tres integrantes; se enlazará en el README y en `v1.0.0`. |
 | `workflow_dispatch` de Andrés y Julián | Pendiente | Debe ejecutarlo cada integrante desde su propia cuenta; solo hay runs de `SantiagoG1309`. |
-| Tablero Kanban | Sin verificar | El token usado no tiene el scope `read:project`; el tablero debe revisarse en la UI del Project. |
+| Tablero Kanban | Existe, revisar tarjetas | Project público [RapidGo - Equipo 8](https://github.com/users/MateoMorales566/projects/1); el token usado no tiene `read:project`, así que las tarjetas deben cerrarse/verificarse en la UI. |
 | Revisiones humanas de PR | Parcial | Los PR tienen revisión de Copilot; falta la aprobación explícita de otro integrante en la UI. |
 
