@@ -32,7 +32,7 @@ alertas y un reporte batch listos para consulta.
 | `v0.1.0-foundation` | 1 | Publicado |
 | `v0.2.0-streaming` | 2 | Publicado |
 | `v0.3.0-orchestration` | 3 | Publicado e integrado a `main` por el PR #25 |
-| `v1.0.0` | 4 | Preparado en este PR; se publica al mergear a `main` |
+| `v1.0.0` | 4 | Publicado sobre `main` (merge `fdb10fd`) |
 
 Notas de cada entrega: [`docs/releases.md`](docs/releases.md).
 
@@ -88,7 +88,7 @@ docs/arquitectura.md            Arquitectura y decisiones de diseño
 docs/arquitectura.png           Diagrama para informes y presentación
 docs/contrato_evento.json       Contrato JSON del evento
 docs/kpis_alertas.md            KPIs, umbrales y reglas de alerta
-docs/evidencias.md              Evidencias de ejecución de las semanas 2 y 3
+docs/evidencias.md              Evidencias de ejecución de las semanas 2, 3 y 4
 docs/releases.md                Notas consolidadas de los releases
 docs/checkpoints/               Checkpoints de las semanas 1 a 3
 docs/decisions/                 ADR-001, ADR-002 y ADR-003
@@ -295,6 +295,21 @@ repositorio y publica el GitHub Release a partir de un tag `v*.*.*`.
 | Alertas `DELIVERY_STOPPED` | 3 |
 | Filas inválidas / duplicadas en `processed` | 0 / 0 |
 
+Ejecución completa con Docker sobre `main` (2026-11-12), tras publicar 60 eventos
+adicionales al topic:
+
+| Métrica | Valor |
+|---|---|
+| Eventos procesados | 180 |
+| Pedidos únicos | 53 |
+| Pedidos entregados | 33 |
+| Tiempo promedio | 35.29 min |
+| Porcentaje fuera de SLA | 18.18 % |
+| Alertas `SLA_EXCEEDED` | 6 |
+| Alertas `DELIVERY_STOPPED` | 3 |
+| DAG `rapidgo_sla_semana3` | `success` en 2.49 s |
+| Filas inválidas / duplicadas | 0 / 0 |
+
 ## Evidencias
 
 - Checkpoints: [`semana1`](docs/checkpoints/semana1.md),
@@ -307,6 +322,10 @@ repositorio y publica el GitHub Release a partir de un tag `v*.*.*`.
 - Notas de release: [`docs/releases.md`](docs/releases.md).
 - Release `v0.3.0-orchestration`:
   [releases/tag/v0.3.0-orchestration](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v0.3.0-orchestration)
+- Release final `v1.0.0`:
+  [releases/tag/v1.0.0](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v1.0.0)
+- Historial completo de releases:
+  [releases](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases)
 - Actions: pestaña **Actions -> CI RapidGo** del repositorio.
   - Integración final (PR #30): [run 43349705279](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349705279)
   - Ejecución manual final: [run 43349871595](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43349871595)
@@ -323,7 +342,16 @@ repositorio y publica el GitHub Release a partir de un tag `v*.*.*`.
   descargar el conector Kafka-Spark desde Maven.
 - La escritura Parquet local en Windows requiere `winutils.exe`; en Docker/Linux funciona
   sin pasos adicionales.
-- El video final no se versiona en el repositorio; se enlaza desde el release `v1.0.0`.
+- El video final no se versiona en el repositorio; debe publicarse en el release `v1.0.0`
+  y enlazarse aquí cuando el equipo lo grabe.
+
+## Video final
+
+Pendiente de grabación por el equipo (máximo 10 minutos). Cuando esté disponible se
+enlazará aquí y en el release
+[`v1.0.0`](https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v1.0.0).
+El guion sugerido de la guía es: problema y variante, arquitectura, demostración funcional
+de Docker/Kafka/Spark/Data Lake/Airflow, recorrido por GitHub y resultados.
 
 ## Responsables y contribuciones
 
