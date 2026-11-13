@@ -209,7 +209,30 @@ python scripts/quality_gate.py
 docker compose config --quiet
 ```
 
+### Ejecución de cierre (2026-11-12)
+
+Stack completo con Docker sobre `main` (`fdb10fd`):
+
+```text
+Topic rapidgo.sla.events: 3 particiones
+Spark streaming: raw, processed y curated activos
+Airflow DAG rapidgo_sla_semana3: state=success, run_duration=2.49 s
+Reporte reports/sla_latest.json: 180 eventos, 53 pedidos, 35.29 min,
+18.18 % fuera de SLA, 6 SLA_EXCEEDED, 3 DELIVERY_STOPPED
+Calidad: 0 filas inválidas, 0 duplicados
+```
+
+| Verificación | Resultado |
+|---|---|
+| `pytest -q` | 70 passed |
+| `compileall` | OK |
+| Contrato JSON | 121 eventos válidos |
+| `quality_gate.py` | OK |
+| `docker compose config --quiet` | OK |
+| CI en `main` | success |
+
 ### Estado
 
-El release `v1.0.0` se crea sobre `main` cuando el PR final esté mergeado y el CI esté en
-verde. El video final no forma parte de este repositorio; se enlaza desde el release.
+Publicado. Tag y GitHub Release `v1.0.0` creados sobre `main` con el `.zip` del repositorio
+adjunto por `release.yml`. El video final no forma parte de este repositorio: queda como
+pendiente del equipo y debe enlazarse desde este release y desde el README.

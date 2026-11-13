@@ -378,3 +378,56 @@ tareas. También se empaqueta `reports/rapidgo-sla-equipo8.zip` como artefacto d
 Los tres jobs terminaron en `success`: `calidad-codigo`, `dag-airflow` y
 `validar-configuracion`.
 
+### 19. Pipeline completo con Docker sobre `main`
+
+Ejecución de cierre sobre el merge `fdb10fd` (2026-11-12), con el stack completo levantado
+desde cero.
+
+```text
+$ docker compose up -d zookeeper kafka kafka-init
+$ docker compose exec kafka kafka-topics --bootstrap-server localhost:29092 \
+    --describe --topic rapidgo.sla.events
+Topic: rapidgo.sla.events   PartitionCount: 3   ReplicationFactor: 1
+
+$ docker compose up -d --no-deps spark-job
+spark-job-1 | Consultas activas: raw, processed, curated
+spark-job-1 | [curated] batch=1 kpis=2 alertas=0
+
+$ python -m producer.producer --count 60 --interval 0.05 --seed 8
+$ docker compose exec -T airflow airflow dags test rapidgo_sla_semana3
+[2026-11-12 22:00:14] {dagrun.py:901} DagRun Finished:
+  dag_id=rapidgo_sla_semana3, state=success, run_duration=2.49
+Reporte SLA listo: {"report": "/opt/airflow/reports/sla_latest.json",
+"size_bytes": 1794, "pedidos_unicos": 53, "tiempo_promedio_min": 35.29,
+"porcentaje_fuera_sla": 18.18,
+"alertas": {"SLA_EXCEEDED": 6, "DELIVERY_STOPPED": 3}}
+```
+
+Resultado del reporte (`reports/sla_latest.json`):
+
+| Métrica | Valor |
+|---|---|
+| Eventos procesados | 180 |
+| Pedidos únicos | 53 |
+| Pedidos entregados | 33 |
+| Tiempo promedio | 35.29 min |
+| Porcentaje fuera de SLA | 18.18 % |
+| Alertas `SLA_EXCEEDED` | 6 |
+| Alertas `DELIVERY_STOPPED` | 3 |
+| Filas inválidas / duplicadas | 0 / 0 |
+
+Las tres capas quedaron escritas en Parquet: `raw`, `processed` y `curated/{kpis,alerts}`,
+con checkpoints en `datalake/_checkpoints/`.
+
+### 20. Cierre del release
+
+- Tag y release `v1.0.0` sobre `main` (merge `fdb10fd`).
+- Issue [#12](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/12) cerrado con
+  el release.
+- Issue [#11](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/11) cerrado por
+  el PR #30.
+- Issue [#10](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/10) cerrado por
+  el PR #29.
+- Pendiente fuera del repositorio: video final y el `workflow_dispatch` manual de los otros
+  dos integrantes.
+
