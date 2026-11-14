@@ -26,11 +26,14 @@ El repositorio quedó ejecutable de punta a punta con Docker y también en local
 | [#33](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/33) | Enlace al tablero Kanban | `234cad3` |
 | [#34](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/34) | Unificación de `requirements.txt` | `6d1f284` |
 | [#35](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/35) | Cierre documental y guía de publicación del video | `4a53d7b` |
+| [#36](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/36) | Verificación en clon limpio y evidencias del cierre | `23a4095` |
+| [#37](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/37) | Enlace del video final en README, release y evidencias | `c8292c4` |
 
 El PR #30 eliminó `semana3/` y `docker-compose.semana3.yml`, consolidó
 `docs/evidencias.md` y `docs/releases.md` y agregó `scripts/quality_gate.py`. El PR #34
 dejó un solo archivo de dependencias con cuatro bloques (base, pruebas, Airflow y Spark) y
-cada contexto instala el grupo que necesita. El PR #35 cerró el README y este checkpoint.
+cada contexto instala el grupo que necesita. El PR #35 cerró el README y este checkpoint, el
+#36 verificó la entrega en un clon limpio y el #37 enlazó el video final.
 
 ## 3. Verificación local (2026-11-13, sobre `main`)
 
@@ -66,15 +69,15 @@ Airflow 2.9.3; en 3.13 se documenta el grupo base, que es el que usó esta verif
 
 ```text
 Tag:      v1.0.0
-Commit:   234cad3 (2026-11-12)
+Commit:   c8292c4 (2026-11-13)
 Release:  https://github.com/MateoMorales566/rapidgo-sla-equipo8/releases/tag/v1.0.0
-Artefacto: rapidgo-sla-equipo8.zip (111 KB)
+Artefacto: rapidgo-sla-equipo8.zip
 Publicado: 2026-11-13
 ```
 
-El ZIP se generó desde el contenido del tag, no desde `main`. Como `main` avanzó después
-con los PRs #34 y #35, el artefacto publicado no incluye esos cambios; el tag y el ZIP
-siguen correspondiendo a la misma versión.
+El tag se movió al merge del PR #37 para que el ZIP publicado incluya el enlace del video
+en el README y en la documentación. Después del tag, `main` solo avanzó con el PR #38
+(registro documental del cierre).
 
 ## 6. Estado de la entrega
 
@@ -106,7 +109,8 @@ Grabado el 2026-11-13 y publicado en YouTube:
 - Issues: 13 de 13 cerrados; el tablero público es
   [RapidGo - Equipo 8 - SLA de entregas](https://github.com/users/MateoMorales566/projects/1)
   y las 13 tarjetas están en la columna DONE.
-- CI sobre el commit del tag: [run 43357687727](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43357687727).
+- CI sobre el commit del tag `c8292c4`: [run 43538679992](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43538679992).
+- CI de la PR #37: [run 43538541536](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43538541536).
 - CI sobre `main` en el merge del PR #35: [run 43459069626](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43459069626)
   sobre `4a53d7b`.
 - Ejecución manual de `NyawToo`: [run 43460938070](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43460938070).
