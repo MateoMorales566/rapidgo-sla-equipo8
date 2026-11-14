@@ -236,10 +236,10 @@ Calidad: 0 filas inválidas, 0 duplicados
 
 ### Estado
 
-Publicado. Tag y GitHub Release `v1.0.0` creados sobre el merge `234cad3` (PR #33,
-2026-11-13) con el ZIP del repositorio adjunto por `release.yml`. `main` avanzó cuatro
-commits después del tag con los PRs #34 (requirements unificados) y #35 (cierre
-documental); el artefacto del release sigue correspondiendo al contenido del tag.
+Publicado. Tag y GitHub Release `v1.0.0` creados sobre el merge `c8292c4` (PR #37,
+2026-11-13) con el ZIP del repositorio adjunto por `release.yml`. El tag se movió a ese
+merge para que el artefacto incluya el enlace del video; después, `main` solo avanzó con el
+PR #38 (registro documental).
 
 El video final no forma parte del repositorio: está publicado en YouTube
 ([https://youtu.be/LwqG7DeIxgM](https://youtu.be/LwqG7DeIxgM)) con la participación de los

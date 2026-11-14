@@ -436,9 +436,10 @@ con checkpoints en `datalake/_checkpoints/`.
 
 ### 20. Cierre del release
 
-- Tag y release `v1.0.0` sobre el merge `234cad3` (PR #33), publicado el 2026-11-13 con el
-  ZIP del repositorio adjunto.
-- `main` avanzó después del tag con los PRs #34 (requirements unificados) y #35 (cierre
+- Tag y release `v1.0.0` sobre el merge `c8292c4` (PR #37), publicado el 2026-11-13 con el
+  ZIP del repositorio adjunto; el tag incluye el enlace del video.
+- `main` incorporó antes del tag los PRs #34 (requirements unificados), #35 (cierre
+  documental) y #36 (verificación en clon limpio); después solo el PR #38 (registro
   documental).
 - Issue [#12](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/12) cerrado con
   el release.
