@@ -446,7 +446,9 @@ con checkpoints en `datalake/_checkpoints/`.
   el PR #30.
 - Issue [#10](https://github.com/MateoMorales566/rapidgo-sla-equipo8/issues/10) cerrado por
   el PR #29.
-- Pendiente fuera del repositorio: el video final.
+- Video final publicado en YouTube ([https://youtu.be/LwqG7DeIxgM](https://youtu.be/LwqG7DeIxgM),
+  10:47), grabado el 2026-11-13 con la participación de los tres integrantes y enlazado en
+  el README y en las notas del release.
 
 ### 21. Dependencias unificadas (PR #34)
 
@@ -474,7 +476,7 @@ README, el Quality Gate y esta evidencia. Verificación: 70 pruebas, Quality Gat
 
 | Pendiente | Estado | Motivo / siguiente paso |
 |---|---|---|
-| Video final (máx. 10 min) | Pendiente | Único entregable de contenido. Se enlaza en el release `v1.0.0` y en el README; los pasos están en `docs/checkpoints/semana4.md`. |
+| Video final | Publicado | [YouTube](https://youtu.be/LwqG7DeIxgM) (10:47), grabado el 2026-11-13 por los tres integrantes; enlazado en el release `v1.0.0` y en el README. |
 | `workflow_dispatch` de Andrés | Pendiente | Julián ya ejecutó el suyo ([run 43460938070](https://github.com/MateoMorales566/rapidgo-sla-equipo8/actions/runs/43460938070)); Andrés debe lanzarlo desde su cuenta. |
 | Tablero Kanban | Verificado | Project público [RapidGo - Equipo 8](https://github.com/users/MateoMorales566/projects/1), enlazado en el README; 13 de 13 tarjetas en la columna DONE. |
 | Revisiones humanas de PR | Parcial | PRs #29, #30 y #34 aprobados por `NyawToo`; el PR #35 quedó sin aprobación humana registrada. |
@@ -504,4 +506,19 @@ exit 0
 La instalación completa necesita Python 3.11 o 3.12 porque Airflow 2.9.3 no soporta 3.13.
 El grupo base se instaló en 3.13 sin problemas y `pyarrow>=16.1.0` deja elegir la versión
 con rueda disponible para esa versión de Python.
+
+### 24. Video final
+
+| Campo | Valor |
+|---|---|
+| Enlace | [https://youtu.be/LwqG7DeIxgM](https://youtu.be/LwqG7DeIxgM) |
+| Fecha de grabación | 2026-11-13 |
+| Duración | 10:47 |
+| Participantes | Andrés Morales, Julián Pérez y Kevin García |
+| Publicación | Enlazado desde el README, el release `v1.0.0` y este documento |
+
+El video recorre el problema de negocio, la arquitectura, la demo del pipeline con Docker
+(Kafka, Spark Structured Streaming, Data Lake y Airflow, incluido el fallo controlado y la
+recuperación), el recorrido por GitHub y los resultados del lote de 120 eventos. No se
+versiona en el repositorio por tamaño.
 

@@ -378,7 +378,7 @@ adicionales al topic:
 | CI en verde sobre `main` | ✅ |
 | Release `v1.0.0` con el ZIP adjunto | ✅ |
 | Tablero Kanban enlazado y 13 tarjetas en DONE | ✅ |
-| Video final de hasta 10 minutos | ❌ Pendiente |
+| Video final publicado y enlazado desde README y release | ✅ |
 
 ## Limitaciones conocidas
 
@@ -388,8 +388,8 @@ adicionales al topic:
   descargar el conector Kafka-Spark desde Maven.
 - La escritura Parquet local en Windows requiere `winutils.exe`; en Docker/Linux funciona
   sin pasos adicionales.
-- El video final no se versiona en el repositorio; se publica fuera y se enlaza desde el
-  release `v1.0.0` y desde este README.
+- El video final no se versiona en el repositorio: está publicado en YouTube y enlazado
+  desde este README y desde el release `v1.0.0`.
 
 ### Trabajo futuro
 
@@ -397,14 +397,17 @@ adicionales al topic:
 - Reemplazar las credenciales y la `FERNET_KEY` de demo por secretos gestionados.
 - Añadir métricas de calidad del dato al tablero y alertas por desviación de volumen.
 - Evaluar Spark en clúster (`spark-master` + `spark-worker`) para volúmenes mayores.
-- Enlazar el video final en el release `v1.0.0` y en este README.
 
 ## Video final
 
-Es el único entregable de contenido que falta. Dura como máximo 10 minutos, no se versiona
-en el repositorio y se enlaza desde el release `v1.0.0` y desde esta sección.
+Grabado por el equipo el 2026-11-13 y publicado en YouTube:
 
-Contenido previsto, en orden:
+**[Proyecto Final Big Data SLA - RapidGo Equipo 8](https://youtu.be/LwqG7DeIxgM)**
+
+Duración: 10:47. Participan los tres integrantes (Andrés Morales, Julián Pérez y Kevin
+García). El video no se versiona en el repositorio.
+
+Contenido, en orden:
 
 1. Problema de negocio y variante 1 (SLA de entregas).
 2. Arquitectura y decisiones principales (ADR-001 a ADR-003).
@@ -413,14 +416,7 @@ Contenido previsto, en orden:
 4. Recorrido por GitHub: README, Actions, releases, PRs, issues y tablero Kanban.
 5. Resultados del lote de 120 eventos y limitaciones conocidas.
 
-Pasos para publicarlo:
-
-1. Grabar el video y subirlo a YouTube (no listado) o a Google Drive con permiso de lectura.
-2. Editar el release `v1.0.0` y agregar el enlace en las notas.
-3. Reemplazar el párrafo de estado de esta sección por el enlace y la fecha de grabación.
-
-Estado: pendiente de grabación. El detalle del cierre está en
-[`docs/checkpoints/semana4.md`](docs/checkpoints/semana4.md).
+El detalle del cierre está en [`docs/checkpoints/semana4.md`](docs/checkpoints/semana4.md).
 
 ## Responsables y contribuciones
 
@@ -433,5 +429,5 @@ Estado: pendiente de grabación. El detalle del cierre está en
 El PR #29 se abrió desde la rama `andres` y su commit es de Andrés Morales, aunque la cuenta
 que creó la PR fue otra; el historial de commits lo registra. La autoría de los commits
 dentro de cada PR puede incluir aportes de otros integrantes. El estado del cierre, con las
-verificaciones y el pendiente del video, está en
+verificaciones y el video final, está en
 [`docs/checkpoints/semana4.md`](docs/checkpoints/semana4.md).

@@ -199,6 +199,7 @@ definitivo con instalación, arquitectura, ejecución, resultados y responsables
 - `release.yml` con quality gate previo, empaquetado `.zip` y publicación del release.
 - `docs/evidencias.md` y `docs/releases.md` consolidados.
 - 70 pruebas automatizadas y CI en verde antes del tag.
+- Video final del equipo: [Proyecto Final Big Data SLA - RapidGo Equipo 8](https://youtu.be/LwqG7DeIxgM) (10:47).
 - `requirements.txt` unificado en cuatro grupos (base, pruebas, Airflow y Spark) en el
   PR [#34](https://github.com/MateoMorales566/rapidgo-sla-equipo8/pull/34), después del tag.
 
@@ -240,6 +241,6 @@ Publicado. Tag y GitHub Release `v1.0.0` creados sobre el merge `234cad3` (PR #3
 commits después del tag con los PRs #34 (requirements unificados) y #35 (cierre
 documental); el artefacto del release sigue correspondiendo al contenido del tag.
 
-El video final no forma parte del repositorio: es el único entregable de contenido pendiente
-del equipo y debe enlazarse desde este release y desde el README. Los pasos están en
-[`docs/checkpoints/semana4.md`](checkpoints/semana4.md).
+El video final no forma parte del repositorio: está publicado en YouTube
+([https://youtu.be/LwqG7DeIxgM](https://youtu.be/LwqG7DeIxgM)) con la participación de los
+tres integrantes y enlazado desde este release y desde el README.
