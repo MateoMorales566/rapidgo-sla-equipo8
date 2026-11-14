@@ -85,21 +85,21 @@ siguen correspondiendo a la misma versión.
 | CI en verde sobre el commit del tag y sobre `main` | ✅ |
 | Tablero Kanban con las 13 tarjetas en DONE | ✅ |
 | Documentación por semanas y ADR | ✅ |
-| Video final de hasta 10 minutos | ❌ Pendiente |
+| Video final publicado y enlazado | ✅ |
 
-## 7. Pendiente: video final
+## 7. Video final
 
-El video es el único entregable de contenido pendiente. No se versiona en el repositorio.
+Grabado el 2026-11-13 y publicado en YouTube:
 
-1. Grabar la demo (máximo 10 minutos): problema, arquitectura, Docker/Kafka/Spark/Data
-   Lake/Airflow con el fallo controlado y la recuperación, recorrido por GitHub y
-   resultados.
-2. Subirlo a YouTube (no listado) o a Google Drive con permiso de lectura.
-3. Editar el release `v1.0.0` y agregar el enlace en las notas.
-4. Reemplazar el estado "pendiente" del README por el enlace y la fecha de grabación.
+**[Proyecto Final Big Data SLA - RapidGo Equipo 8](https://youtu.be/LwqG7DeIxgM)**
 
-El guion y el plan de grabación se guardan fuera del repositorio, junto con el resto del
-material de la Semana 4.
+- Duración: 10:47.
+- Participantes: Andrés Morales, Julián Pérez y Kevin García.
+- Contenido: problema de negocio, arquitectura y ADR, demo del pipeline con Docker (Kafka,
+  Spark Structured Streaming, Data Lake y Airflow con el fallo controlado y la
+  recuperación), recorrido por GitHub y resultados del lote de 120 eventos.
+- Enlazado en el README y en las notas del release `v1.0.0`. No se versiona en el
+  repositorio por tamaño.
 
 ## 8. Trazabilidad
 
